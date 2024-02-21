@@ -45,31 +45,93 @@ paths:
               schema:
                 $ref: '#/components/schemas/RegistrationData'
         '400':
-          description: Ill-formed request
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
+          $ref: '#/components/responses/400'
         '401':
-          description: Not registered
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
+          $ref: '#/components/responses/401'
         '403':
-          description: Unauthorized
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
+          $ref: '#/components/responses/403'
         '404':
-          description: Invalid resource
+          $ref: '#/components/responses/404'
+  /sessions:
+    get:
+      summary: get session status for all sessions for all applications
+      responses:
+        '200':
+          description: Expected response to a valid request
           content:
-            application/problem+json:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetails'
+                $ref: '#/components/schemas/SessionsData'
+  /sessions/{dynamicId}/{sessionId}:
+    get:
+      summary: get session status for a given sessions for a given application
+      parameters:
+        - name: dynamicId
+          in: path
+          description: Unique ID of the application
+          required: true
+          schema:
+            $ref: '#/components/schemas/DynamicId'
+        - name: sessionId
+          in: path
+          description: Unique ID of the sesson
+          required: true
+          schema:
+            $ref: '#/components/schemas/SessionId'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionData'
 components:
+  responses:
+    '400':
+      description: Ill-formed request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    '401':
+      description: Not registered
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    '403':
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    '404':
+      description: Invalid resource
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
   schemas:
+    DynamicId:
+      type: string
+      format: uuid
+      description: >
+        String uniquely identifying a application. The format shall be a 
+        Universally Unique Identifier (UUID) version 4, as described in IETF RFC
+        4122. 
+    SessionId:
+      type: string
+      format: uuid
+      description: >
+        String uniquely identifying a session. The format shall be a 
+        Universally Unique Identifier (UUID) version 4, as described in IETF RFC
+        4122. 
+    CouplingMode:
+      description: application coupling mode
+      enum:
+        - loose
+        - tight
+      default: loose
     RegistrationRequest:
       description: Application registration request.
       type: object
@@ -83,21 +145,50 @@ components:
         supportedVersions:
           type: array
           items:
-            $ref: '#/components/schemas/Uri'
+            type: string
+        couplingMode:
+          $ref: '#/components/schemas/CouplingMode'
     RegistrationData:
       description: Application registration data.
       type: object
       properties:
-        appCategory:
+        registrationStatus:
+          enum:
+            - registered
+            - notRegistered
+          default: notRegistered
+        selectedVersion:
           type: string
-        staticIdentifier:
-          type: string
+    SessionsData:
+      description: session status for several sessions
+      type: object
+      properties:
+        sessionsData:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionData'
+    SessionData:
+      description: session status for a specific session
+      type: object
+      properties:
         dynamicIdentifier:
           type: string
-        supportedVersions:
+        participants:
           type: array
           items:
             $ref: '#/components/schemas/Uri'
+        progressStatus:
+          $ref: '#/components/schemas/SessionProgressStatus'
+    SessionProgressStatus:
+      description: possible status for a session
+      enum:
+        - established
+        - inProgress
+        - networkNotReady
+        - notRegistered
+        - rejected
+        - closing
+        - closed
     ProblemDetails:
       description: Provides additional information in an error response.
       type: object
