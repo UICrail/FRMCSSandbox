@@ -39,7 +39,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegistrationRequestData'
+              $ref: '#/components/schemas/ProblemDetails'
         required: true
       responses:
         '200':
@@ -47,20 +47,71 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegistrationRequestData'
+                $ref: '#/components/schemas/ProblemDetails'
         '400':
-          $ref: '#/components/responses/400'
+          description: Bad request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
         '401':
-          $ref: '#/components/responses/401'
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '403':
-          $ref: '#/components/responses/403'
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
-        '501':
-          $ref: '#/components/responses/501'
-        '503':
-          $ref: '#/components/responses/503'
-        default:
-          $ref: '#/components/responses/default'
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '405':
+          description: Method Not Allowed
+        '408':
+          description: Request Timeout
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '406':
+          description: 406 Not Acceptable
+
+components:
+  schemas:
+
+  ProblemDetails:
+      description: Provides additional information in an error response.
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Uri'
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+        instance:
+          $ref: '#/components/schemas/Uri'
+        cause:
+          type: string
+          description: >
+            A machine-readable application error cause specific to this occurrence of the problem. 
+            This IE should be present and provide application-related error information, if
+            available.
+        supportedApiVersions:
+          type: array
+          items:
+            type: string
+          minItems: 1
+  Uri:
+      type: string
+      description: String providing an URI formatted according to RFC 3986.
