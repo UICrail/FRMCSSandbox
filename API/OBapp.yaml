@@ -1,24 +1,20 @@
 openapi: 3.0.0
-
 info:
   version: '0.1'
-  title: 'OBapp'
+  title: OBapp
   description: |
     OBapp reference point.  
     © 2024, UIC.  
     All rights reserved.
-
 externalDocs:
   description: OBapp reference point
-  url: 'https://uic.org/rail-system/telecoms-signalling/frmcs'
-
+  url: https://uic.org/rail-system/telecoms-signalling/frmcs
 servers:
   - url: '{apiRoot}/obapp/v1'
     variables:
       apiRoot:
         default: https://uic.org
         description: apiRoot as defined in clause x.y of UIC FFFIS xyz
-
 paths:
   /registrations:
     post:
@@ -39,7 +35,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProblemDetails'
+              $ref: '#/components/schemas/RegistrationRequest'
         required: true
       responses:
         '200':
@@ -47,46 +43,62 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetails'
+                $ref: '#/components/schemas/RegistrationData'
         '400':
-          description: Bad request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
+          description: Ill-formed request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '401':
-          description: Unauthorized
+          description: Not registered
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
         '403':
-          description: Forbidden
+          description: Unauthorized
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
         '404':
-          description: Not Found
+          description: Invalid resource
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-        '405':
-          description: Method Not Allowed
-        '408':
-          description: Request Timeout
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        '406':
-          description: 406 Not Acceptable
-
 components:
   schemas:
-
-  ProblemDetails:
+    RegistrationRequest:
+      description: Application registration request.
+      type: object
+      properties:
+        appCategory:
+          type: string
+        staticIdentifier:
+          type: string
+        dynamicIdentifier:
+          type: string
+        supportedVersions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Uri'
+    RegistrationData:
+      description: Application registration data.
+      type: object
+      properties:
+        appCategory:
+          type: string
+        staticIdentifier:
+          type: string
+        dynamicIdentifier:
+          type: string
+        supportedVersions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Uri'
+    ProblemDetails:
       description: Provides additional information in an error response.
       type: object
       properties:
@@ -98,20 +110,22 @@ components:
           type: integer
         detail:
           type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+          description: >-
+            A human-readable explanation specific to this occurrence of the
+            problem.
         instance:
           $ref: '#/components/schemas/Uri'
         cause:
           type: string
           description: >
-            A machine-readable application error cause specific to this occurrence of the problem. 
-            This IE should be present and provide application-related error information, if
-            available.
+            A machine-readable application error cause specific to this
+            occurrence of the problem.  This IE should be present and provide
+            application-related error information, if available.
         supportedApiVersions:
           type: array
           items:
             type: string
           minItems: 1
-  Uri:
+    Uri:
       type: string
       description: String providing an URI formatted according to RFC 3986.
