@@ -1,0 +1,66 @@
+openapi: 3.0.0
+
+info:
+  version: '0.1'
+  title: 'OBapp'
+  description: |
+    OBapp reference point.  
+    © 2024, UIC.  
+    All rights reserved.
+
+externalDocs:
+  description: OBapp reference point
+  url: 'https://uic.org/rail-system/telecoms-signalling/frmcs'
+
+servers:
+  - url: '{apiRoot}/obapp/v1'
+    variables:
+      apiRoot:
+        default: https://uic.org
+        description: apiRoot as defined in clause x.y of UIC FFFIS xyz
+
+paths:
+  /registrations:
+    post:
+      summary: Registration of an application
+      operationId: CreateRegistration
+      parameters:
+        - name: Content-Encoding
+          in: header
+          description: Content-Encoding, described in IETF RFC 9110
+          schema:
+            type: string
+        - name: Accept-Encoding
+          in: header
+          description: Accept-Encoding, described in IETF RFC 9110
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequestData'
+        required: true
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationRequestData'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        '501':
+          $ref: '#/components/responses/501'
+        '503':
+          $ref: '#/components/responses/503'
+        default:
+          $ref: '#/components/responses/default'
