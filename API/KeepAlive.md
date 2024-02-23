@@ -99,6 +99,41 @@ end
 ```
 ### OFr.b.2 Application tries to open a new session S2
 
+```mermaid
+
+sequenceDiagram
+participant A as EVC
+participant O as OB FRMCS
+
+Note over A,O:  opened session S1 
+
+opt with OB PoL
+  A->> O: trigger ProofOfLife endpoint
+  O->>A: 200 OK
+  O-->>A:  SSE POL
+  alt OB FRMCS restart so POL not received by App
+    Note over O:  restart
+    Note over A,O: no service attempt
+    Note over A:  App not getting POL
+    Note over A,O:  local binding
+    A->> O: trigger ProofOfLife endpoint
+    O->>A: 200 OK
+  else OB FRMCS restart, App tries something before expected POL
+    Note over O:  restart
+    A->>O: open session
+    O->>A:  401
+    Note over A,O: local binding
+    Note over O: close S1
+  end
+end
+
+opt without OB PoL
+  Note over O:  restart
+  Note over A,O: traffic →
+  Note over O: behaviour?
+end  
+```
+
 ## OFr.c Application profile allows incoming session
 
 
