@@ -143,3 +143,62 @@ end
 Note over A,B2: → ended connection with RBC1
 
 ```
+
+## inter-RBC (cross border)
+
+```mermaid
+
+sequenceDiagram
+participant A as EVC
+participant O as OB FRMCS
+participant M1 as MCX1
+participant M2 as MCX2
+participant T1 as TS GW1
+participant T2 as TS GW2
+participant B1 as RBC1
+participant B2 as RBC2
+
+par OB setup
+	Note over O: Start of Operation 
+	Note over A,O: OBapp local binding
+	Note over O,M:	MC registration
+and TS setup
+	Note over B1,T1: OBapp local binding
+	Note over B2,T2: OBapp local binding
+	Note over T1,M1: MC registration
+	Note over T2,M2: MC registration
+end
+
+% existing session with B1
+Note over A,B1: session S1 EVC ↔ RBC1
+
+% BXL
+Note over O,M1: NTT to move to Domain 2
+Note over O,M2: acquisition of Domain 2
+O-->>A: SSE FSD_AVL [Domain 2]
+
+% establishment of session to B2
+Note over A:	SBG {RBC2}
+
+A->>O:	POST /sessions/{DynamicID} [RBC2]
+par Initial answer
+	O->>A:	200 OK [initial answer]
+and Session establishment
+	Note over O,T2: MCdata
+	T2-->>B2:	Incoming Session {SessionID}
+	B2->>T2:	PUT /sessions/{DynamicID}/{SessionID}
+	T2->>B2: 200 OK
+end
+O-->>A:	Final answer {SessionID=S2}	
+Note over A,B2: establishment of EVC ↔ RBC2 connection
+Note over A,B2: ← end connection with RBC1
+A->>O:	DELETE /sessions/{DynamicID}/S1
+par ack to EVC
+	O->>A:	200 OK
+and closure towards TS
+	Note over O,T1:	MCdata termination [RBC1]
+	T1-->>B1: S1 closure
+end
+Note over A,B2: → ended connection with RBC1
+
+```
