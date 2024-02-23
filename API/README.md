@@ -74,8 +74,8 @@ par App Local Binding and subscriptions to general events
 	T->>B: 200 OK
 and MC registration for App
 	Note over O,M: MCregistration
-	O-->>A: FSD_AVL
-	Note over T,B: MCregistration
+	O-->>A: SSE FSD_AVL
+	Note over T,M: MCregistration
 end
 
 %open session
@@ -119,7 +119,7 @@ end
 Note over A,B1: session S1 EVC ↔ RBC1
 
 % establishment of session to B2
-Note over A:	SBG {B2}
+Note over A:	SBG {RBC2}
 
 A->>O:	POST /sessions/{DynamicID} [RBC2]
 par Initial answer
