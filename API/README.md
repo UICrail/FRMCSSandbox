@@ -109,8 +109,8 @@ par OB setup
 	Note over A,O: OBapp local binding
 	Note over O,M:	MC registration
 and TS setup
-	Note over B1,T: OBapp local binding
-	Note over B2,T: OBapp local binding
+	Note over B1,T: TSapp local binding
+	Note over B2,T: TSapp local binding
 	Note over T,M:	MC registration
 end
 
@@ -160,10 +160,10 @@ participant B2 as RBC2
 par OB setup
 	Note over O: Start of Operation 
 	Note over A,O: OBapp local binding
-	Note over O,M:	MC registration
+	Note over O,M1:	MC registration
 and TS setup
-	Note over B1,T1: OBapp local binding
-	Note over B2,T2: OBapp local binding
+	Note over B1,T1: TSapp local binding
+	Note over B2,T2: TSapp local binding
 	Note over T1,M1: MC registration
 	Note over T2,M2: MC registration
 end
