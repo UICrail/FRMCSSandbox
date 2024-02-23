@@ -47,3 +47,47 @@ participant B as "OB FRMCS"
 	B->>A: SSE on /notifications/{DynamicId}/general
 
 ```
+
+# ETCS flow
+
+```mermaid
+
+sequenceDiagram
+participant A as EVC
+participant O as OB FRMCS
+participant M as MCX
+participant T as TS GW
+participant B as RBC
+
+Note over O: Start of Operation
+par App Local Binding and subscriptions to general events
+	%Note over LCAppOB,OBfrmcs: OBapp local binding
+	A->>O: POST /registrations
+	O->>A: 200 OK {DynamicID}
+	A->>O: GET /notifications/{DynamicID}/general
+	O->>A: 200 OK
+	B->>T: POST /registrations
+	T->>B: 200 OK {DynamicID}
+	B->>T: GET /notifications/{DynamicID}/general
+	T->>B: 200 OK
+and MC registration for App
+	Note over O,M: MCregistration
+	O-->>A: FSD_AVL
+	Note over T,B: MCregistration
+end
+
+%open session
+A->>O:	POST /sessions/{DynamicID}
+par Initial answer
+	O->>A:	200 OK [initial answer]
+and Session establishment
+	Note over O,T: MCdata
+	T->>B:	Incoming Session {SessionID}
+	B->>T:	PUT /sessions/{DynamicID}/{SessionID}
+	T->>B: 200 OK
+end
+O-->>A:	Final answer {SessionID}	
+Note over A,B: establishment of EVC ↔ RBC connection
+
+
+```
