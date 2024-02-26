@@ -187,6 +187,117 @@ end
 
 # App restart
 
+## Pre-condition workflow
+
+```mermaid
+
+sequenceDiagram
+participant A as EVC
+participant O as OB FRMCS
+participant M as MCX
+participant T as TS GW
+participant B1 as RBC1
+
+par OB setup
+	Note over O: Start of Operation 
+	Note over A,O: OBapp local binding
+	Note over O,M:	MC registration
+and TS setup
+	Note over B1,T: TSapp local binding
+	Note over T,M:	MC registration
+end
+```
+
+## APPr.a Application had not initiated a session prior
+
+```mermaid
+
+sequenceDiagram
+participant A as EVC
+participant O as OB FRMCS
+
+opt with App PoL
+  loop every PoL interval
+    A->> O: trigger ProofOfLife endpoint
+    O->>A: 200 OK
+  end
+  alt App restart, POL --x OB 
+    Note over A:  restart
+    Note over O:  OB not getting POL before interval
+    Note over O:  invalidate LB
+    Note over A,O:  local binding
+    Note over A,O:  normal flow
+  else App restart, before POL
+    Note over A:  restart, before POL
+    Note over A,O:  local binding
+    Note over O:  invalidate LB
+    Note over A,O:  normal flow
+  end
+end
+
+opt without App PoL
+  Note over A:  restart
+  Note over A,O:  local binding
+  Note over O:  invalidate LB
+  Note over A,O:  normal flow
+end
+
+```
+
+## APPr.b Application had initiated a session prior
+
+```mermaid
+
+sequenceDiagram
+participant A as EVC
+participant O as OB FRMCS
+
+Note over A,O:  opened session S1
+
+opt with App PoL
+  loop every PoL interval
+    A->> O: trigger ProofOfLife endpoint
+    O->>A: 200 OK
+  end
+
+  alt App restart, POL --x OB 
+    Note over A:  restart
+    Note over O:  OB not getting POL before interval
+    Note over O:  invalidate LB, S1
+    Note over A,O:  local binding
+    Note over A,O:  normal flow
+  else App restart, traffic ← before POL
+    Note over A: restart
+    Note over O: traffic ←
+    Note over O: behaviour?
+    Note over O:  OB not getting POL before interval
+    Note over O:  invalidate LB, S1
+    Note over A,O:  local binding
+    Note over A,O:  normal flow
+  end
+end
+
+opt without App PoL
+  alt App restart, traffic ← before LB
+    Note over A:  restart
+    Note over O: traffic ←
+    Note over O: behaviour?
+    Note over A,O:  local binding
+    Note over O:  invalidate LB, S1
+    Note over A,O:  normal flow
+  else App restart, traffic ← before LB
+    Note over A:  restart
+    Note over A,O:  local binding
+    Note over O:  invalidate LB, S1
+    Note over A,O:  normal flow
+  end
+end
+
+```
+
+## APPr.c Application profile allows incoming session
+
+
 ```mermaid
 
 sequenceDiagram
