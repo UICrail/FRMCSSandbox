@@ -41,8 +41,9 @@ opt with OB PoL
   alt OB FRMCS restart so POL not received by App
     Note over O:  restart
     Note over A:  App not getting POL
+    %O--xA: SSE POL
     Note over A,O:  local binding
-    A->> O: GET ProofOfLife endpoint
+    A->> O: trigger ProofOfLife endpoint
     O->>A: 200 OK
   else OB FRMCS restart, App tries something before expected POL
     Note over O:  restart
@@ -129,14 +130,60 @@ end
 
 opt without OB PoL
   Note over O:  restart
-  Note over A,O: traffic →
-  Note over O: behaviour?
+  A->>O: open session
+  O->>A:  401
+  Note over A,O: local binding
+  Note over O: close S1
 end  
 ```
 
 ## OFr.c Application profile allows incoming session
 
+```mermaid
 
+sequenceDiagram
+participant A as EVC
+participant O as OB FRMCS
+
+opt with OB PoL
+  A->> O: trigger ProofOfLife endpoint
+  O->>A: 200 OK
+  O-->>A:  SSE POL
+  alt OB FRMCS restart, POL --x App but interval < restart + LB + MC
+    Note over O:  restart
+    Note over A:  App not getting POL
+    Note over A,O:  local binding
+    Note over O: MC registration
+    A->> O: trigger ProofOfLife endpoint
+    O->>A: 200 OK
+    O-->>A: SSE incoming session
+    Note over A,O: incoming session acceptance
+  else OB FRMCS restart, incoming session before POL
+    Note over O:  restart
+    O-->>A: SSE incoming session
+    Note over O: incoming session timer expires
+    Note over O: DECLINE invite →
+    Note over A:  App not getting POL
+    Note over A,O:  local binding
+    A->> O: trigger ProofOfLife endpoint
+    O->>A: 200 OK
+  end
+end
+
+opt without OB PoL
+  alt OB FRMCS restart, MC registration
+    Note over O: restart
+    Note over O: MC registration
+    Note over O: receipt of incoming session ←
+    Note over O: app not locally bound →
+    Note over A: App has no "knowledge" of service attempt
+  else OB FRMCS restart, no MC registration in time
+   Note over O: restart
+   Note right of O: incoming session attempt ←
+   Note over A,O: neither have "knowledge" of service attempt
+  end
+end  
+```
 
 # App restart
 
