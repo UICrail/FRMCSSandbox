@@ -16,7 +16,7 @@ participant FSD as FRMCS Service Domain
 
 Note over O: selection of one or more OB RMs for FSoOP
 Note over O, FTD: OB RM registration to 5GS [765-1]
-Note over O, NFTD: OB RM registration to Non-FRMCS Transport Domain [not specified]
+Note over O, NFTD: OB RM registration to Non-FRMCS Transport Domain [not FRMCS-specified]
 
 Note over O: selection of an OB RM for FRMCS Multipath discovery
 Note over O, FTD: FRMCS Multipath discovery procedure [765-1]
@@ -51,7 +51,7 @@ participant FTD as FRMCS Transport Domain
 participant NFTD as Non-FRMCS Transport Domain
 participant FSD as FRMCS Service Domain
 
-Note over O: shutdown order
+Note over O: FRMCS shutdown order
 
 par cleanup network side at Service Stratum
   loop per LC in LBA state
@@ -62,7 +62,7 @@ and cleanup app side
   loop per LC in LBA state
     opt if opened sessions
       loop per session S
-        O -->>AL:  session closure notification <S>
+        O -->>AL:  session closure notification <S> [765-3]
       end
     end
     O-->>AL:  FSD_NAVL [765-3]
@@ -71,7 +71,7 @@ and cleanup app side
 end
 
 opt if Multipath
-  Note over O,FTD: Multipath CP cleanup procedure
+  Note over O,FTD: Multipath CP cleanup procedure [765-1]
 end
 
 par cleanup network side at Transport Stratum
@@ -85,4 +85,5 @@ and cleanup app side
   end
 end 
 
+Note over O: FRMCS shutdown complete
 ```
