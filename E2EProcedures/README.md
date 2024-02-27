@@ -14,6 +14,8 @@ participant FTD as FRMCS Transport Domain
 participant NFTD as Non-FRMCS Transport Domain
 participant FSD as FRMCS Service Domain
 
+Note over O: FRMCS Start of Operation order
+
 Note over O: selection of one or more OB RMs for FSoOP
 Note over O, FTD: OB RM registration to 5GS [765-1]
 Note over O, NFTD: OB RM registration to Non-FRMCS Transport Domain [not FRMCS-specified]
@@ -37,6 +39,7 @@ loop per LC TSA
   O -->> AL:  FSD_AVL [765-3]
 end
 
+Note over O: FRMCS Start of Operation complete
 ```
 
 # Close of Operation
