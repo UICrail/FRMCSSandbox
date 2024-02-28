@@ -80,14 +80,14 @@ end
 %open session
 A->>O:	POST /sessions/{DynamicID}
 par Initial answer
-	O->>A:	200 OK [initial answer]
+	O->>A:	200 OK [initial answer] (SessionID=S1)
 and Session establishment
 	Note over O,T: MCdata
-	T-->>B:	SSE Incoming Session {SessionID}
-	B->>T:	PUT /sessions/{DynamicID}/{SessionID}
+	T-->>B:	SSE Incoming Session (SessionID=S3)
+	B->>T:	PUT /sessions/{DynamicID}/S3
 	T->>B: 200 OK
 end
-O-->>A:	SSE Final answer {SessionID}	
+O-->>A:	SSE Final answer (SessionID=S1)	
 Note over A,B: establishment of EVC ↔ RBC connection
 
 ```
@@ -118,18 +118,18 @@ end
 Note over A,B1: session S1 EVC ↔ RBC1
 
 % establishment of session to B2
-Note over A:	SBG {RBC2}
+Note over A:	SBG (RBC2)
 
 A->>O:	POST /sessions/{DynamicID} [RBC2]
 par Initial answer
-	O->>A:	200 OK [initial answer]
+	O->>A:	200 OK [initial answer] (SessionID=S2)
 and Session establishment
 	Note over O,T: MCdata
-	T-->>B2:	SSE Incoming Session {SessionID}
-	B2->>T:	PUT /sessions/{DynamicID}/{SessionID}
+	T-->>B2:	SSE Incoming Session (SessionID=S3)
+	B2->>T:	PUT /sessions/{DynamicID}/S3
 	T->>B2: 200 OK
 end
-O-->>A:	SSE Final answer {SessionID=S2}	
+O-->>A:	SSE Final answer (SessionID=S2)	
 Note over A,B2: establishment of EVC ↔ RBC2 connection
 Note over A,B2: ← end connection with RBC1
 A->>O:	DELETE /sessions/{DynamicID}/S1
@@ -137,7 +137,7 @@ par ack to EVC
 	O->>A:	200 OK
 and closure towards TS
 	Note over O,T:	MCdata termination [RBC1]
-	T-->>B1: SSE S1 closure
+	T-->>B1: SSE closure (SessionID=S3)
 end
 Note over A,B2: → ended connection with RBC1
 
@@ -177,18 +177,18 @@ Note over O,M2: acquisition of Domain 2
 O-->>A: SSE FSD_AVL [Domain 2]
 
 % establishment of session to B2
-Note over A:	SBG {RBC2}
+Note over A:	SBG (RBC2)
 
 A->>O:	POST /sessions/{DynamicID} [RBC2]
 par Initial answer
-	O->>A:	200 OK [initial answer]
+	O->>A:	200 OK [initial answer] (SessionID=S2)
 and Session establishment
 	Note over O,T2: MCdata
-	T2-->>B2:	SSE Incoming Session {SessionID}
-	B2->>T2:	PUT /sessions/{DynamicID}/{SessionID}
+	T2-->>B2:	SSE Incoming Session (SessionID=S3)
+	B2->>T2:	PUT /sessions/{DynamicID}/S3
 	T2->>B2: 200 OK
 end
-O-->>A:	SSE Final answer {SessionID=S2}	
+O-->>A:	SSE Final answer (SessionID=S2)
 Note over A,B2: establishment of EVC ↔ RBC2 connection
 Note over A,B2: ← end connection with RBC1
 A->>O:	DELETE /sessions/{DynamicID}/S1
@@ -196,7 +196,7 @@ par ack to EVC
 	O->>A:	200 OK
 and closure towards TS
 	Note over O,T1:	MCdata termination [RBC1]
-	T1-->>B1: SSE S1 closure
+	T1-->>B1: SSE closure (SessionID=S3)
 end
 Note over A,B2: → ended connection with RBC1
 
