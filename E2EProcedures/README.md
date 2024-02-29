@@ -147,7 +147,7 @@ opt interoperable LC app (no session)
   Note over O,M2:  MC user authentication [765-2]
   Note over O,M2:  MC service authorization [765-2]
   O-->>AL1: SSE FSD_AVL [Domain 2]  [765-3]
-  Note over O,M1: MC deregistration
+  Note over M1: MC tagged migrated
 end
 opt interoperable LC app (active session S1)
   Note over O,M2: acquisition of FRMCS Service Domain 2  [765-2]
@@ -158,7 +158,7 @@ opt interoperable LC app (active session S1)
   Note over O,T2: establishment S1 replacement?  [765-2]
   Note over O,T1: terminate S1?  [765-2]
   O-->>AL2: SSE FSD_AVL [Domain 2]  [765-3]
-  Note over O,M1: MC deregistration
+  Note over M1: MC tagged migrated
 end
 
 ```
