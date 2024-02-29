@@ -90,3 +90,77 @@ end
 
 Note over O: FRMCS shutdown complete
 ```
+
+# Inter-FRMCS Domain Transition
+
+```mermaid
+
+sequenceDiagram
+participant AL1 as OB LC App (no session)
+participant AL2 as OB LC App (active)
+participant AT as OB TC App
+participant O as OB FRMCS
+participant M1 as MCX1
+participant M2 as MCX2
+participant T1 as TS GW1
+participant T2 as TS GW2
+%participant B1 as RBC1
+%participant B2 as RBC2
+
+par OB setup
+	Note over O: Start of Operation 
+	Note over AL1,O: OBapp local binding
+  Note over AL2,O: OBapp local binding
+  Note over AL2,T1: active session S1
+	Note over O,M1:	MC registration
+and TS setup
+	%Note over B1,T1: TSapp local binding
+	%Note over B2,T2: TSapp local binding
+	Note over T1,M1: MC registration
+	Note over T2,M2: MC registration
+end
+
+% BXL
+Note over O,M1: NTT to move to Domain 2  [765-2]
+
+% BXL - TC
+Note over O,M2: acquisition of FRMCS Transport Domain 2  [765-1]
+O-->>AT: SSE FTD_AVL [Domain 2]  [765-3]
+Note over AT,M2:  MC migration  [765-2]
+Note over AT,M2:  MC user authentication [765-2]
+Note over AT,M2:  MC service authorization [765-2]
+
+opt non-interoperable in Domain 2 LC app
+  O-->>AL2:  SSE session closure (S1)
+  Note over O,M1: MC deregistration
+  O-->>AL2:  SSE FSD_NAVL [Domain 1]  [765-3]
+end
+opt non-interoperable in Domain 1 LC app
+  Note over O,M2: acquisition of FRMCS Service Domain 2  [765-2]
+  Note over O,M2:  MC migration  [765-2]
+  Note over O,M2:  MC user authentication [765-2]
+  Note over O,M2:  MC service authorization [765-2]
+  O-->>AL1:  SSE FSD_AVL [Domain 2]  [765-3]
+end
+opt interoperable LC app (no session)
+  Note over O,M2: acquisition of FRMCS Service Domain 2  [765-2]
+  Note over O,M2:  MC migration  [765-2]
+  Note over O,M2:  MC user authentication [765-2]
+  Note over O,M2:  MC service authorization [765-2]
+  O-->>AL1: SSE FSD_AVL [Domain 2]  [765-3]
+  Note over O,M1: MC deregistration
+end
+opt interoperable LC app (active session S1)
+  Note over O,M2: acquisition of FRMCS Service Domain 2  [765-2]
+  Note over O,M2:  MC migration  [765-2]
+  Note over O,M2:  MC user authentication [765-2]
+  Note over O,M2:  MC service authorization [765-2]
+  O-->>AL2: SSE FSD_AVL [Domain 2]  [765-3]
+  Note over O,T2: establishment S1 replacement?  [765-2]
+  Note over O,T1: terminate S1?  [765-2]
+  O-->>AL2: SSE FSD_AVL [Domain 2]  [765-3]
+  Note over O,M1: MC deregistration
+end
+
+```
+
