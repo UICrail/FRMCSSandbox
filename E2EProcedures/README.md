@@ -137,7 +137,6 @@ opt non-interoperable in Domain 2 LC app
 end
 opt non-interoperable in Domain 1 LC app
   Note over O,M2: acquisition of FRMCS Service Domain 2  [765-2]
-  Note over O,M2:  MC migration  [765-2]
   Note over O,M2:  MC user authentication [765-2]
   Note over O,M2:  MC service authorization [765-2]
   O-->>AL1:  SSE FSD_AVL [Domain 2]  [765-3]
