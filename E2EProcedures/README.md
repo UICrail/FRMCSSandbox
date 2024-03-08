@@ -30,12 +30,11 @@ loop per LC TSA
   end
 end
 
-Note over O, FTD: establishment or reuse of PDU session for MC signaling [765-1]
+Note over O, FTD: Transport path establishment for MC signaling [765-1]
 O -->> AT:  FTD_AVL  [765-3]
 
 loop per LC TSA
-  Note over O, FSD: SIP registration to FRMCS SIP Core [765-2]
-  Note over O, FSD: MC User authentication and MC Service User authorization [765-2]
+  Note over O, FSD: MC user registration  [765-2]
   O -->> AL:  FSD_AVL [765-3]
 end
 
@@ -58,8 +57,7 @@ Note over O: FRMCS shutdown order
 
 par cleanup network side at Service Stratum
   loop per LC in LBA state
-    Note over O,FSD:  MC deregistration [765-2]
-    Note over O,FSD:  SIP deregistration [765-2]
+    Note over O,FSD:  MC user deregistration [765-2]
   end
 and cleanup app side
   loop per LC in LBA state
