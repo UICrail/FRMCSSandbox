@@ -110,55 +110,51 @@ participant T2 as TS GW2
 par OB setup
 	Note over O: Start of Operation 
 	Note over AL1,O: OBapp local binding
-  Note over AL2,O: OBapp local binding
-  Note over AL2,T1: active session S1
-	Note over O,M1:	MC registration
+  	Note over AL2,O: OBapp local binding
+  	Note over AL2,T1: active session S1
+  	Note over O,M1:	MC user registration
 and TS setup
 	%Note over B1,T1: TSapp local binding
 	%Note over B2,T2: TSapp local binding
-	Note over T1,M1: MC registration
-	Note over T2,M2: MC registration
+	Note over T1,M1: MC user registration
+	Note over T2,M2: MC user registration
 end
 
 % BXL
 Note over O,M1: NTT to move to Domain 2  [765-2]
+Note over O,M2: acquisition of FRMCS Transport Domain 2  [765-1]
 
 % BXL - TC
-Note over O,M2: acquisition of FRMCS Transport Domain 2  [765-1]
-O-->>AT: SSE FTD_AVL [Domain 2]  [765-3]
-Note over AT,M2:  MC migration  [765-2]
-Note over AT,M2:  MC user authentication [765-2]
-Note over AT,M2:  MC service authorization [765-2]
+loop Tight Coupled Application
+  O-->>AT: SSE FTD_AVL [Domain 2]  [765-3]
+  Note over AT,M2:  MC user migration FSD1 → FSD2 [765-2]
+end
 
-opt non-interoperable in Domain 2 LC app
-  O-->>AL2:  SSE session closure (S1)
-  Note over O,M1: MC deregistration
-  O-->>AL2:  SSE FSD_NAVL [Domain 1]  [765-3]
+% BXL - LC
+loop Type II applications
+  opt applications entering the Domain of applicability
+    Note over O,M2: MC user registration  [765-2]
+    O-->>AL1: SSE FSD_AVL [Domain 2]  [765-3]  
+  end
+  opt applications exiting the Domain of applicability
+    Note over O,M1: MCX session/transaction termination [765-2]
+    O-->>AL2:  SSE session closure (S1) [765-3]
+    Note over O,M1: MC user deregistration [765-2]
+    O-->>AL2:  SSE FSD_NAVL [Domain 1]  [765-3]
+  end
 end
-opt non-interoperable in Domain 1 LC app
-  Note over O,M2: acquisition of FRMCS Service Domain 2  [765-2]
-  Note over O,M2:  MC user authentication [765-2]
-  Note over O,M2:  MC service authorization [765-2]
-  O-->>AL1:  SSE FSD_AVL [Domain 2]  [765-3]
-end
-opt interoperable LC app (no session)
-  Note over O,M2: acquisition of FRMCS Service Domain 2  [765-2]
-  Note over O,M2:  MC migration  [765-2]
-  Note over O,M2:  MC user authentication [765-2]
-  Note over O,M2:  MC service authorization [765-2]
-  O-->>AL1: SSE FSD_AVL [Domain 2]  [765-3]
-  Note over M1: MC tagged migrated
-end
-opt interoperable LC app (active session S1)
-  Note over O,M2: acquisition of FRMCS Service Domain 2  [765-2]
-  Note over O,M2:  MC migration  [765-2]
-  Note over O,M2:  MC user authentication [765-2]
-  Note over O,M2:  MC service authorization [765-2]
-  O-->>AL2: SSE FSD_AVL [Domain 2]  [765-3]
-  Note over O,T2: establishment S1 replacement?  [765-2]
-  Note over O,T1: terminate S1?  [765-2]
-  O-->>AL2: SSE FSD_AVL [Domain 2]  [765-3]
-  Note over M1: MC tagged migrated
+
+loop Type I or Type III applications
+  opt no open session
+    Note over O,M2: MC user migration FSD1 → FSD2 [765-2]
+    O-->>AL1: SSE FSD_AVL [Domain 2]  [765-3]
+  end
+  opt at least one open session
+    Note over O,M2: MC user migration FSD1 → FSD2 [765-2]
+    O-->>AL1: SSE FSD_AVL [Domain 2]  [765-3]
+    Note over O,T2:  ongoing MCX session/transaction transfer FSD1 → FSD2? [765-2]
+    Note over O,T1: MCX session/transaction termination? [765-2]  
+  end
 end
 
 ```
