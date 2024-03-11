@@ -278,6 +278,7 @@ paths:
 components:
   schemas:
     # FFFIS application and session identifiers
+    # need to specify the version of UUID that shall be used
     dynamicId:
       description: "identifier of the application instance, dynamically assigned at registration. UUID."
       type: string
@@ -330,4 +331,15 @@ components:
       pattern: '^([0-9A-Za-z]([-0-9A-Za-z]{0,61}[0-9A-Za-z])?\.)+[A-Za-z]{2,63}\.?$'
       minLength: 4
       maxLength: 253
-      
+
+    # FFFIS enums
+    CouplingMode:
+      description: |
+        Possible values:
+          - tight for Tight Coupled mode
+          - loose for Loose Coupled mode
+      type: string
+      enum:
+        - tight
+        - loose
+      default: loose
