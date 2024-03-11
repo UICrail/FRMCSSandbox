@@ -274,3 +274,32 @@ paths:
       responses:
         '204':
           description: No content
+
+components:
+  schemas:
+    # FFFIS application and session identifiers
+    dynamicId:
+      description: "identifier of the application instance, dynamically assigned at registration. UUID."
+      type: string
+      format: uuid
+    sessionId:
+      description: "identifier of the application session. UUID"
+      type: string
+      format: uuid
+
+    # IPv4 / IPv6 addresses
+    # Aligned with 3GPP 29.571 Common Data yaml description
+    Ipv4Addr:
+      description: String identifying a IPv4 address formatted in the 'dotted decimal' notation as defined in RFC 1166.
+      type: string
+      pattern: '^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$'
+      example: '198.51.100.1'
+    Ipv6Addr:
+      description: String identifying an IPv6 address formatted according to clause 4 of RFC5952.
+      type: string
+      allOf:
+        - pattern: '^((:|(0?|([1-9a-f][0-9a-f]{0,3}))):)((0?|([1-9a-f][0-9a-f]{0,3})):){0,6}(:|(0?|([1-9a-f][0-9a-f]{0,3})))$'
+        - pattern: '^((([^:]+:){7}([^:]+))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?))$'
+      example: '2001:db8:85a3::8a2e:370:7334'
+      
+      
