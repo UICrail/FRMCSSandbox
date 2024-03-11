@@ -301,5 +301,33 @@ components:
         - pattern: '^((:|(0?|([1-9a-f][0-9a-f]{0,3}))):)((0?|([1-9a-f][0-9a-f]{0,3})):){0,6}(:|(0?|([1-9a-f][0-9a-f]{0,3})))$'
         - pattern: '^((([^:]+:){7}([^:]+))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?))$'
       example: '2001:db8:85a3::8a2e:370:7334'
+
+    # IP address
+    # Similar to 3GPP 29.571 Common Data yaml description (without ipv6Prefix which is not applicable in FRMCS FFFIS)
+    IpAddr:
+      description: Contains an IP adress.
+      type: object
+      oneOf:
+        - required:
+          - ipv4Addr
+        - required:
+          - ipv6Addr
+      properties:
+        ipv4Addr:
+          $ref: '#/components/schemas/Ipv4Addr'
+        ipv6Addr:
+          $ref: '#/components/schemas/Ipv6Addr'
+
+    # URI, aligned with 3GPP 29.571 Common Data yaml description
+    Uri:
+      description: String providing an URI formatted according to RFC 3986.
+      type: string
       
+    # FQDN, aligned with 3GPP 29.571 Common Data yaml description
+    Fqdn:
+      description: Fully Qualified Domain Name
+      type: string
+      pattern: '^([0-9A-Za-z]([-0-9A-Za-z]{0,61}[0-9A-Za-z])?\.)+[A-Za-z]{2,63}\.?$'
+      minLength: 4
+      maxLength: 253
       
