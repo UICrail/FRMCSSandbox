@@ -52,7 +52,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
       responses:
         '200':
           description: OK
@@ -65,7 +65,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
       responses:
         '204':
           description: No content
@@ -78,7 +78,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
       responses:
         '200':
           description: OK
@@ -91,7 +91,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
       requestBody:
         required: true
         content:
@@ -120,7 +120,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
       responses:
         '204':
           description: No content
@@ -133,12 +133,12 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
         - name: SessionId
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/SessionId'
       responses:
         '200':
           description: OK
@@ -151,23 +151,18 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
         - name: SessionId
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/SessionId'
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              properties:
-                session_id:
-                  type: string
-              required:
-                - session_id
       responses:
         '200':
           description: OK
@@ -180,12 +175,12 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
         - name: SessionId
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/SessionId'
       responses:
         '204':
           description: No content
@@ -216,12 +211,12 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
         - name: Channel
           in: path
           required: true
           schema:
-            type: string
+            type: object
       responses:
         '200':
           description: A list of notifications
@@ -238,12 +233,12 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/DynamicId'
         - name: Channel
           in: path
           required: true
           schema:
-            type: string
+            type: object
       responses:
         '204':
           description: No content
