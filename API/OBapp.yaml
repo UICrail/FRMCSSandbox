@@ -43,6 +43,12 @@ paths:
       responses:
         '201':
           description: Created
+          headers:
+            Location:
+              description: 'Contains the URI of the newly created resource'
+              required: true
+              schema:
+                type: string
         '400':
           description: Bad request
 
@@ -118,8 +124,14 @@ paths:
               required:
                 - session_id
       responses:
-        '200':
-          description: OK
+        '201':
+          description: 'Session created'
+          headers:
+            Location:
+              description: 'Contains the URI of the newly created resource'
+              required: true
+              schema:
+                type: string
         '400':
           description: Bad request
     delete:
