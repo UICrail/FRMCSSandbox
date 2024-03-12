@@ -162,10 +162,18 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/IncomingSessionNotificationResponse'
       responses:
         '200':
-          description: OK
+          description: OK, sent if the application has accepted the incoming session request
+          headers:
+            Content-Location:
+              description: 'URI of the session being established'
+              required: true
+              schema:
+                $ref: '#/components/schemas/Uri'
+        '204':
+          description: No content, sent if the application has declined the incoming session request
         '400':
           description: Bad request
     delete:
@@ -184,6 +192,7 @@ paths:
       responses:
         '204':
           description: No content
+        # TODO: consider possible rejection by the server of a session closure?
 
   /notifications/general:
     get:
@@ -343,6 +352,13 @@ components:
         - basic
         - critical
       default: basic
+
+    IncomingSessionAppResponse:
+      description: application response to an incoming session request
+      type: string
+      enum:
+        - accepted
+        - rejected
     
     RemoteAddress:
       description: "Remote address of an application in the scope of session exchange messages"
@@ -376,7 +392,16 @@ components:
         - $ref: "#/components/schemas/DataComm"
         - $ref: "#/components/schemas/VideoComm"
       default: "basic"
-      
+
+    IncomingSessionNotificationResponse:
+      description: Response to an incoming session
+      type: object
+      properties:
+        appResponse:
+          $ref: "#/components/schemas/IncomingSessionAppResponse"
+        localAppIPAddress:
+          $ref: '#/components/schemas/IpAddr'
+          
     Recipient:
       description: "Recipient"
       type: object
