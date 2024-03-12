@@ -162,7 +162,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IncomingSessionNotificationResponse'
+              $ref: '#/components/schemas/IncomingSessionNotificationResponseData'
       responses:
         '200':
           description: OK, sent if the application has accepted the incoming session request
@@ -393,15 +393,19 @@ components:
         - $ref: "#/components/schemas/VideoComm"
       default: "basic"
 
-    IncomingSessionNotificationResponse:
-      description: Response to an incoming session
+    IncomingSessionNotificationResponseData:
+      description: Response to an incoming session notification
       type: object
       properties:
         appResponse:
           $ref: "#/components/schemas/IncomingSessionAppResponse"
         localAppIPAddress:
           $ref: '#/components/schemas/IpAddr'
-          
+
+    IncomingSessionNotificationResponseErrorData:
+      description: Data in case of error when responding to an incoming session notification
+      type: object
+
     Recipient:
       description: "Recipient"
       type: object
