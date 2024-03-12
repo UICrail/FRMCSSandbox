@@ -209,11 +209,9 @@ paths:
         '200':
           description: Subscribe to the general notification channel
           content:
-            application/json:
+            text/event-stream:
               schema:
-                type: array
-                items:
-                  type: object
+                type: object
     delete:
       summary: Unsubscribe all subscriptions to the general notification channel
       responses:
@@ -222,7 +220,7 @@ paths:
 
   /notifications/{DynamicId}/{Channel}:
     get:
-      summary: Subscribe to a specific channel for an application
+      summary: Subscribe to a specific channel for an application (SSE)
       parameters:
         - name: DynamicId
           in: path
@@ -233,16 +231,14 @@ paths:
           in: path
           required: true
           schema:
-            type: object
+            $ref: '#/components/schemas/Channel'
       responses:
         '200':
-          description: A list of notifications
+          description: SSE notifications
           content:
-            application/json:
+            text/event-stream:
               schema:
-                type: array
-                items:
-                  type: object
+                type: object
     delete:
       summary: Unsubscribe to a specific channel for an application
       parameters:
@@ -255,7 +251,7 @@ paths:
           in: path
           required: true
           schema:
-            type: object
+            $ref: '#/components/schemas/Channel'
       responses:
         '204':
           description: No content
@@ -343,6 +339,15 @@ components:
     ApplicationStaticIdentifier:
       description: Unique identifier of the Application.
       type: string
+
+    Channel:
+      description: Channel of notification
+      type: string
+      enum:
+        - general
+        - location
+        - time
+      default: general
       
     CouplingMode:
       description: >
