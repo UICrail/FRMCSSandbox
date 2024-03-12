@@ -120,21 +120,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                session_id:
-                  type: string
-              required:
-                - session_id
+              $ref: '#/components/schemas/SessionOpenData'
       responses:
         '201':
           description: 'Session created'
           headers:
             Location:
-              description: 'Contains the URI of the newly created resource'
+              description: 'URI of the session which was opened'
               required: true
               schema:
-                type: string
+                $ref: '#/components/schemas/Uri'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionOpenedData'
         '400':
           description: Bad request
     delete:
@@ -294,11 +293,11 @@ components:
   schemas:
     # FFFIS application and session identifiers
     # TODO: need to specify the version of UUID that shall be used
-    dynamicId:
+    DynamicId:
       description: "identifier of the application instance, dynamically assigned at registration. UUID."
       type: string
       format: uuid
-    sessionId:
+    SessionId:
       description: "identifier of the application session. UUID"
       type: string
       format: uuid
@@ -383,7 +382,62 @@ components:
         - loose
       default: loose
 
+    DataComm:
+      description: "The data communication mode is used by the Communication category parameter. It reflects the possible values applicable to this mode: basic or criticale"
+      type: string
+      enum:
+        - basic
+        - critical
+      default: basic
+    
+    RemoteAddress:
+      description: "Remote address of an application in the scope of session exchange messages"
+      type: string
+      minLength: 3
+      maxLength: 255
+
+    SessionStartReqFirstStatus:
+      description: "Provides the first status of a Session start request. This parameter is used in the Session start first answer message"
+      type: string
+      enum:
+        - inProgress
+        - networkNotReady
+        - notRegistered
+        - rejected
+      default: inProgress
+      
+    VideoComm:
+      description: "The video communication mode is used by the Communication category parameter. It reflects the possible values applicable to this mode: basic or critical."
+      type: string
+      enum:
+        - basic
+        - critical
+      default: basic
+
     # FFFIS payloads
+    CommunicationCategory:
+      description: "This parameter reflects the different categories of communication (session) that can be established over the FRMCS according to the [FRMCS FRS]. This parameter is used by the On-Board FRMCS to initiate an end-to-end session. Based on this parameter, the On-Board FRMCS assigns the right communication profile including the QoS level to the session."
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/DataComm"
+        - $ref: "#/components/schemas/VideoComm"
+      default: "basic"
+      
+    Recipient:
+      description: "Recipient"
+      type: object
+      properties:
+        remoteAddress:
+          $ref: "#/components/schemas/RemoteAddress"
+        communicationCategory:
+          $ref: "#/components/schemas/CommunicationCategory"
+    
+    RecipientsList:
+      description: "List of Recipients"
+      type: array
+      items:
+        $ref: "#/components/schemas/Recipient"
+        
     RegisterData:
       description: Registration data input
       type: object
@@ -400,9 +454,35 @@ components:
       type: object
       properties:
         appObId:
-          $ref: '#/components/schemas/dynamicId'
+          $ref: '#/components/schemas/DynamicId'
 
     # TODO: document error structure
     RegisterErrorData:
       description: Data in case of registration error
+      type: object
+
+    # TODO: check whether this shall not be renamed as OBSessionOpenData as TSapp equivalent might be slightly different (e.g. cardinality of recipients)
+    SessionOpenData:
+      description: Session opening data input
+      type: object
+      properties:
+        appObId:
+          $ref: '#/components/schemas/DynamicId'
+        localAppIPAddress:
+          $ref: '#/components/schemas/IpAddr'
+        recipientsList:
+          $ref: '#/components/schemas/RecipientsList'
+
+    SessionOpenedData:
+      description:  Session opening data output
+      type: object
+      properties:
+        sessionId:
+          $ref: '#/components/schemas/SessionId'
+        sessionStatus:
+          $ref: '#/components/schemas/SessionStartReqFirstStatus'
+
+    # TODO: document error structure
+    SessionOpenErrorData:
+      description: Data in case of error when opening a session
       type: object
