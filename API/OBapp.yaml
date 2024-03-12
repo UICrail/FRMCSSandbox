@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   version: '0.1'
   title: OBapp
@@ -261,6 +261,8 @@ paths:
           description: No content
 
 components:
+  securitySchemes:
+    type: mutualTLS
   schemas:
     # FFFIS application and session identifiers
     # TODO: need to specify the version of UUID that shall be used
