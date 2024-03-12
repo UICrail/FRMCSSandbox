@@ -34,21 +34,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                registration_id:
-                  type: string
-              required:
-                - registration_id
+              $ref: '#/components/schemas/RegisterData'
       responses:
         '201':
-          description: Created
+          description: Successful registration
           headers:
             Location:
-              description: 'Contains the URI of the newly created resource'
+              description: 'URI of the registered application instance'
               required: true
               schema:
-                type: string
+                $ref: '#/components/schemas/Uri'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredData'
         '400':
           description: Bad request
 
@@ -290,7 +289,7 @@ paths:
 components:
   schemas:
     # FFFIS application and session identifiers
-    # need to specify the version of UUID that shall be used
+    # TODO: need to specify the version of UUID that shall be used
     dynamicId:
       description: "identifier of the application instance, dynamically assigned at registration. UUID."
       type: string
@@ -345,8 +344,32 @@ components:
       maxLength: 253
 
     # FFFIS enums
+
+    # TODO: is a closed list enumeration the right thing to do if the FRMCS framework foresees that applications could be added
+    # Ultimately, the ApplicationCategory serves to retrieve from the FOAP the parameters associated to the application
+    # In the context of railway interoperability, there shall be harmonized application categories but the schema shall allow for non-harmonized extensions
+    # which would allow for IM-specific non-interoperable applications (Type II) and RU-specific non-interoperable applications (that would be subject to use where 
+    # IMs within the area of use authorize it 
+    ApplicationCategory:
+      description: Provides the category of the Application (e.g., ETCS, ATO, FRMCS Voice Application Function, TCMS, etc.). 
+        When applicable, this parameter is used to link the registration to the necessary 3GPP MCX service(s).
+      type: string
+      enum:
+        - CategoryA
+        - CategoryB
+        - CategoryC
+
+    # TODO: a multipart schema would be preferable over a single string as this would facilitate the usage of mapping rules when
+    # generating the MC Service User ID associated to a given application 
+    # Note: as it helps with establishing identity within the MCX framework, it may actually be more representative of the identification of an 
+    # application instance or the service user associated to the application than the application itself. 
+    ApplicationStaticIdentifier:
+      description: Unique identifier of the Application.
+      type: string
+      
     CouplingMode:
-      description: |
+      description: >
+        The application coupling mode.
         Possible values:
           - tight for Tight Coupled mode
           - loose for Loose Coupled mode
@@ -355,3 +378,31 @@ components:
         - tight
         - loose
       default: loose
+
+    # FFFIS payloads
+    RegisterData:
+      description: Registration data input
+      type: object
+      properties:
+        appCategory:
+          $ref: '#/components/schemas/ApplicationCategory'
+        staticId:
+          $ref: '#/components/schemas/ApplicationStaticIdentifier'
+        couplingMode:
+          $ref: '#/components/schemas/CouplingMode'
+
+    RegisteredData:
+      description:  Registration data output
+      type: object
+      properties:
+        appObId:
+          $ref: '#/components/schemas/dynamicId'
+
+    RegisterErrorData:
+      description: Data in case of registration error
+      type: object
+      properties:
+        appObId:
+          $ref: '#/components/schemas/dynamicId'
+    
+    
