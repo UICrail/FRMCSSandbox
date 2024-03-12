@@ -262,7 +262,8 @@ paths:
 
 components:
   securitySchemes:
-    type: mutualTLS
+    clientCert:
+      type: mutualTLS
   schemas:
     # FFFIS application and session identifiers
     # TODO: need to specify the version of UUID that shall be used
