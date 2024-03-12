@@ -50,6 +50,10 @@ paths:
                 $ref: '#/components/schemas/RegisteredData'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterErrorData'
 
   /registrations/{DynamicId}:
     get:
@@ -398,11 +402,7 @@ components:
         appObId:
           $ref: '#/components/schemas/dynamicId'
 
+    # TODO: document error structure
     RegisterErrorData:
       description: Data in case of registration error
       type: object
-      properties:
-        appObId:
-          $ref: '#/components/schemas/dynamicId'
-    
-    
