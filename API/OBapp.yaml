@@ -113,6 +113,10 @@ paths:
                 $ref: '#/components/schemas/SessionOpenedData'
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionOpenErrorData'
     delete:
       summary: Terminate all sessions for an application
       parameters:
@@ -176,6 +180,10 @@ paths:
           description: No content, sent if the application has declined the incoming session request
         '400':
           description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomingSessionNotificationResponseErrorData'
     delete:
       summary: Terminate a session for an application
       parameters:
