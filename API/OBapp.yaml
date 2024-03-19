@@ -220,6 +220,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IncomingSessionNotificationResponseErrorData'
+        '401':
+          description: Unauthorized, local binding required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomingSessionNotificationResponseErrorData'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomingSessionNotificationResponseErrorData'
+          
     delete:
       summary: Terminate a session for an application
       parameters:
