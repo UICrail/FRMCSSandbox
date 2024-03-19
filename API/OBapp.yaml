@@ -340,6 +340,11 @@ components:
       description: Unique identifier of the Application.
       type: string
 
+    ApplicationVersion:
+        type: string
+        pattern: '^(\d+\.\d+\.\d+)$'
+        description: Semantic version of the application (e.g., 1.0.0)
+      
     Channel:
       description: Channel of notification
       type: string
@@ -391,7 +396,13 @@ components:
         - notRegistered
         - rejected
       default: inProgress
-      
+
+    SupportedVersionsList:
+      description: "Array of supported versions of the interface"
+      type: array
+      items:
+        $ref: '#/components/schemas/ApplicationVersion'
+        
     VideoComm:
       description: "The video communication mode is used by the Communication category parameter. It reflects the possible values applicable to this mode: basic or critical."
       type: string
@@ -445,6 +456,8 @@ components:
           $ref: '#/components/schemas/ApplicationCategory'
         staticId:
           $ref: '#/components/schemas/ApplicationStaticIdentifier'
+        supportedVersionsList:
+          $ref: '#/components/schemas/SupportedVersionsList'
         couplingMode:
           $ref: '#/components/schemas/CouplingMode'
 
