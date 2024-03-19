@@ -272,22 +272,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionTerminateErrorData'
-          
-  /notifications/general:
-    get:
-      summary: Get general notifications
-      responses:
-        '200':
-          description: Subscribe to the general notification channel
-          content:
-            text/event-stream:
-              schema:
-                type: object
-    delete:
-      summary: Unsubscribe all subscriptions to the general notification channel
-      responses:
-        '204':
-          description: No content
 
   /notifications/{DynamicId}/{Channel}:
     get:
