@@ -43,6 +43,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RegisterErrorData'
+        '403':
+          description: Forbidden (unrecognized application, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterErrorData'
 
   /registrations/{DynamicId}:
     get:
