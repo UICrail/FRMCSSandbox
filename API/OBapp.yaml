@@ -121,7 +121,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SessionOpenData'
+              $ref: '#/components/schemas/OBSessionOpenData'
       responses:
         '201':
           description: 'Session created'
@@ -556,7 +556,20 @@ components:
       oneOf:
         - $ref: '#/components/schemas/GenericErrorData'
 
-    # TODO: check whether this shall not be renamed as OBSessionOpenData as TSapp equivalent might be slightly different (e.g. cardinality of recipients)
+    OBSessionOpenData:
+      description: Session opening data input (OBapp)
+      type: object
+      properties:
+        localAppIPAddress:
+          $ref: '#/components/schemas/IpAddr'
+        recipientsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipient'
+          minItems: 1
+          maxItems: 1
+          
+    # TODO: kept for now as TSapp equivalent could use a cardinality of recipients > 1
     SessionOpenData:
       description: Session opening data input
       type: object
