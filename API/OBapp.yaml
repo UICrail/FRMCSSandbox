@@ -237,7 +237,19 @@ paths:
         '204':
           description: No content
         # TODO: consider possible rejection by the server of a session closure?
-
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionTerminateErrorData'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionTerminateErrorData'
+          
   /notifications/general:
     get:
       summary: Get general notifications
@@ -566,3 +578,8 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/SessionId'
+    
+    # TODO: document error structure
+    SessionTerminateErrorData:
+      description: Data in case of error when terminating a session
+      type: object
