@@ -94,6 +94,12 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionsListData'
+        '401':
+          description: Unauthorized, local binding required
         '404':
           description: Not found
     post:
@@ -129,6 +135,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionOpenErrorData'
+        '401':
+          description: Unauthorized, local binding required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionOpenErrorData'
+        '403':
+          description: Forbidden, session initiation not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionOpenErrorData'
     delete:
       summary: Terminate all sessions for an application
       parameters:
@@ -158,6 +176,12 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatusData'
+        '401':
+          description: Unauthorized, local binding required
         '404':
           description: Not found
     put:
@@ -497,8 +521,6 @@ components:
       description: Session opening data input
       type: object
       properties:
-        appObId:
-          $ref: '#/components/schemas/DynamicId'
         localAppIPAddress:
           $ref: '#/components/schemas/IpAddr'
         recipientsList:
@@ -517,3 +539,30 @@ components:
     SessionOpenErrorData:
       description: Data in case of error when opening a session
       type: object
+
+    # TODO: clarify as, theoretically, there could be more than one recipient...
+    SessionStatusData:
+      description: information about a session
+      type: object
+      properties:
+        sessionOriginator:
+          type: object
+        communicationCategory:
+          $ref: "#/components/schemas/CommunicationCategory"
+        localDestFRMCSIPAddress:
+          $ref: '#/components/schemas/IpAddr'
+        destApplicationIPAddress:
+          $ref: '#/components/schemas/IpAddr'
+        remoteAddress:
+          type: object
+
+    # TODO: document error structure
+    SessionStatusErrorData:
+      description: Data in case of error when fetching a session status
+      type: object
+
+    SessionsListData:
+      description: list of sessions
+      type: array
+      items:
+        $ref: '#/components/schemas/SessionId'
