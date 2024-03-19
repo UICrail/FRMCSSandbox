@@ -347,9 +347,15 @@ components:
       type: string
 
     ApplicationVersion:
-        type: string
-        pattern: '^(\d+\.\d+\.\d+)$'
-        description: Semantic version of the application (e.g., 1.0.0)
+      type: string
+      pattern: '^(\d+\.\d+\.\d+)$'
+      description: Semantic version of the application (e.g., 1.0.0)
+      example: 1.0.0
+
+    ApplicationVersionsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ApplicationVersion'
       
     Channel:
       description: Channel of notification
@@ -402,12 +408,6 @@ components:
         - notRegistered
         - rejected
       default: inProgress
-
-    SupportedVersionsList:
-      description: "Array of supported versions of the interface"
-      type: array
-      items:
-        $ref: '#/components/schemas/ApplicationVersion'
         
     VideoComm:
       description: "The video communication mode is used by the Communication category parameter. It reflects the possible values applicable to this mode: basic or critical."
@@ -463,7 +463,7 @@ components:
         staticId:
           $ref: '#/components/schemas/ApplicationStaticIdentifier'
         supportedVersionsList:
-          $ref: '#/components/schemas/SupportedVersionsList'
+          $ref: '#/components/schemas/ApplicationVersionsList'
         couplingMode:
           $ref: '#/components/schemas/CouplingMode'
 
@@ -473,6 +473,8 @@ components:
       properties:
         appObId:
           $ref: '#/components/schemas/DynamicId'
+        selectedVersion:
+          $ref: '#/components/schemas/ApplicationVersion'
 
     # TODO: document error structure
     RegisterErrorData:
