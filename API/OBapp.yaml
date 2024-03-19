@@ -75,6 +75,12 @@ paths:
       responses:
         '204':
           description: No content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeRegisterErrorData'
 
   /sessions/{DynamicId}:
     get:
@@ -426,6 +432,11 @@ components:
         - $ref: "#/components/schemas/VideoComm"
       default: "basic"
 
+    # TODO: document error structure
+    DeRegisterErrorData:
+      description: Data in case of registration error
+      type: object
+      
     IncomingSessionNotificationResponseData:
       description: Response to an incoming session notification
       type: object
