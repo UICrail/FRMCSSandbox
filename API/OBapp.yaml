@@ -293,7 +293,19 @@ paths:
           content:
             text/event-stream:
               schema:
-                type: object
+                $ref: '#/components/schemas/EventStream'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicChannelErrorData'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicChannelErrorData'
     delete:
       summary: Unsubscribe to a specific channel for an application
       parameters:
@@ -362,7 +374,29 @@ components:
     Uri:
       description: String providing an URI formatted according to RFC 3986.
       type: string
-      
+
+    # event stream
+    EventStream:
+      description: Server sent events model
+      type: object
+      properties:
+        id:
+          type: integer
+        event:
+          type: string
+        data:
+          oneOf:
+            - $ref: "#/components/schemas/GeneralChannelEventStreamData"
+            - $ref: "#/components/schemas/LocationChannelEventStreamData"
+    
+    GeneralChannelEventStreamData:
+      description: data on general event stream
+      type: object
+
+    LocationChannelEventStreamData:
+      description: data on general event stream
+      type: object
+
     # FQDN, aligned with 3GPP 29.571 Common Data yaml description
     Fqdn:
       description: Fully Qualified Domain Name
@@ -434,7 +468,13 @@ components:
         - basic
         - critical
       default: basic
-      
+    
+    DynamicChannelErrorData:
+      description: Data in case of SSE subscription error
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
+        
     # Inspired from ProblemDetails in 3GPP 29.571
     GenericErrorData:
       description: Provides additional information in an error response.
@@ -490,7 +530,6 @@ components:
         - $ref: "#/components/schemas/VideoComm"
       default: "basic"
 
-    # TODO: document error structure
     DeRegisterErrorData:
       description: Data in case of registration error
       type: object
@@ -549,7 +588,6 @@ components:
         selectedVersion:
           $ref: '#/components/schemas/ApplicationVersion'
 
-    # TODO: document error structure
     RegisterErrorData:
       description: Data in case of registration error
       type: object
@@ -588,7 +626,6 @@ components:
         sessionStatus:
           $ref: '#/components/schemas/SessionStartReqFirstStatus'
 
-    # TODO: document error structure
     SessionOpenErrorData:
       description: Data in case of error when opening a session
       type: object
@@ -611,7 +648,6 @@ components:
         remoteAddress:
           type: object
 
-    # TODO: document error structure
     SessionStatusErrorData:
       description: Data in case of error when fetching a session status
       type: object
@@ -624,7 +660,6 @@ components:
       items:
         $ref: '#/components/schemas/SessionId'
     
-    # TODO: document error structure
     SessionTerminateErrorData:
       description: Data in case of error when terminating a session
       type: object
