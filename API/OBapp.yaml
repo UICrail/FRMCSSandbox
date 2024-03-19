@@ -434,7 +434,22 @@ components:
         - basic
         - critical
       default: basic
-
+      
+    # Inspired from ProblemDetails in 3GPP 29.571
+    GenericErrorData:
+      description: Provides additional information in an error response.
+      type: object
+      properties:
+        resource:
+          $ref: '#/components/schemas/Uri'
+        cause:
+          type: string
+          description: >
+            A machine-readable application error cause specific to this occurrence of the problem. 
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+          
     IncomingSessionAppResponse:
       description: application response to an incoming session request
       type: string
@@ -479,6 +494,8 @@ components:
     DeRegisterErrorData:
       description: Data in case of registration error
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
       
     IncomingSessionNotificationResponseData:
       description: Response to an incoming session notification
@@ -492,6 +509,8 @@ components:
     IncomingSessionNotificationResponseErrorData:
       description: Data in case of error when responding to an incoming session notification
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
 
     Recipient:
       description: "Recipient"
@@ -534,6 +553,8 @@ components:
     RegisterErrorData:
       description: Data in case of registration error
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
 
     # TODO: check whether this shall not be renamed as OBSessionOpenData as TSapp equivalent might be slightly different (e.g. cardinality of recipients)
     SessionOpenData:
@@ -558,6 +579,8 @@ components:
     SessionOpenErrorData:
       description: Data in case of error when opening a session
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
 
     # TODO: clarify as, theoretically, there could be more than one recipient...
     SessionStatusData:
@@ -579,6 +602,8 @@ components:
     SessionStatusErrorData:
       description: Data in case of error when fetching a session status
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
 
     SessionsListData:
       description: list of sessions
@@ -590,3 +615,5 @@ components:
     SessionTerminateErrorData:
       description: Data in case of error when terminating a session
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
