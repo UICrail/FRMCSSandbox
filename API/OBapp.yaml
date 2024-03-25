@@ -19,6 +19,8 @@ paths:
     post:
       summary: Register an application
       operationId: registerApplication
+      tags:
+        - registration management
       requestBody:
         required: true
         content:
@@ -55,6 +57,8 @@ paths:
     delete:
       summary: De-register an application
       operationId: deregisterApplication
+      tags:
+        - registration management
       parameters:
         - name: DynamicId
           in: path
@@ -81,6 +85,8 @@ paths:
     get:
       summary: List of sessions for an application
       operationId: listApplicationSessions
+      tags:
+        - session management
       parameters:
         - name: DynamicId
           in: path
@@ -101,6 +107,8 @@ paths:
     post:
       summary: Create a session for an application
       operationId: createApplicationSession
+      tags:
+        - session management
       parameters:
         - name: DynamicId
           in: path
@@ -147,6 +155,8 @@ paths:
     delete:
       summary: Terminate all sessions for an application
       operationId: terminateApplicationSessions
+      tags:
+        - session management
       parameters:
         - name: DynamicId
           in: path
@@ -165,6 +175,8 @@ paths:
     get:
       summary: Get information on a session of an application
       operationId: listApplicationSessionStatus
+      tags:
+        - session management
       parameters:
         - name: DynamicId
           in: path
@@ -198,6 +210,8 @@ paths:
     put:
       summary: Respond to an incoming session request notification for an application
       operationId: answerApplicationIncomingSessionRequest
+      tags:
+        - session management
       parameters:
         - name: DynamicId
           in: path
@@ -248,6 +262,8 @@ paths:
     delete:
       summary: Terminate a session for an application
       operationId: terminateApplicationSession
+      tags:
+        - session management
       parameters:
         - name: DynamicId
           in: path
@@ -280,6 +296,8 @@ paths:
     get:
       summary: Subscribe to a specific channel for an application (SSE)
       operationId: subscribeApplicationNotificationChannel
+      tags:
+        - notification management
       parameters:
         - name: DynamicId
           in: path
@@ -313,6 +331,8 @@ paths:
     delete:
       summary: Unsubscribe to a specific channel for an application
       operationId: unsubscribeApplicationNotificationChannel
+      tags:
+        - notification management
       parameters:
         - name: DynamicId
           in: path
