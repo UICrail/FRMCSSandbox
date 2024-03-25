@@ -14,6 +14,14 @@ servers:
       apiRoot:
         default: https://uic.org
         description: apiRoot as defined in clause x.y of UIC FFFIS xyz
+tags:
+  - name: registration management
+    description: Management of application registration
+  - name: session management
+    description: Management of application sessions
+  - name: notification management
+    description: Management of application notifications
+
 paths:
   /registrations:
     post:
