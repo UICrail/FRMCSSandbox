@@ -75,7 +75,7 @@ paths:
             $ref: '#/components/schemas/DynamicId'
       responses:
         '204':
-          description: No content
+          description: No content (application deregistered)
         '401':
           description: Unauthorized
           content:
@@ -173,7 +173,7 @@ paths:
             $ref: '#/components/schemas/DynamicId'
       responses:
         '204':
-          description: No content
+          description: No content (sessions terminated)
         '401':
           description: Unauthorized
         '404':
@@ -247,7 +247,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Uri'
         '204':
-          description: No content, sent if the application has declined the incoming session request
+          description: No content (acknowledgement of the application having declined the incoming session request)
         '400':
           description: Bad request
           content:
@@ -285,7 +285,7 @@ paths:
             $ref: '#/components/schemas/SessionId'
       responses:
         '204':
-          description: No content
+          description: No content (session terminated)
         # TODO: consider possible rejection by the server of a session closure?
         '401':
           description: Unauthorized
@@ -354,7 +354,7 @@ paths:
             $ref: '#/components/schemas/Channel'
       responses:
         '204':
-          description: No content
+          description: No content (channel unsubscribed)
 
 components:
   securitySchemes:
