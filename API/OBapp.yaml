@@ -18,6 +18,7 @@ paths:
   /registrations:
     post:
       summary: Register an application
+      operationId: registerApplication
       requestBody:
         required: true
         content:
@@ -53,6 +54,7 @@ paths:
   /registrations/{DynamicId}:
     delete:
       summary: De-register an application
+      operationId: deregisterApplication
       parameters:
         - name: DynamicId
           in: path
@@ -78,6 +80,7 @@ paths:
   /sessions/{DynamicId}:
     get:
       summary: List of sessions for an application
+      operationId: listApplicationSessions
       parameters:
         - name: DynamicId
           in: path
@@ -97,6 +100,7 @@ paths:
           description: Application with {DynamicId} not found
     post:
       summary: Create a session for an application
+      operationId: createApplicationSession
       parameters:
         - name: DynamicId
           in: path
@@ -142,6 +146,7 @@ paths:
                 $ref: '#/components/schemas/SessionOpenErrorData'
     delete:
       summary: Terminate all sessions for an application
+      operationId: terminateApplicationSessions
       parameters:
         - name: DynamicId
           in: path
@@ -159,6 +164,7 @@ paths:
   /sessions/{DynamicId}/{SessionId}:
     get:
       summary: Get information on a session of an application
+      operationId: listApplicationSessionStatus
       parameters:
         - name: DynamicId
           in: path
@@ -190,7 +196,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/SessionStatusErrorData'
     put:
-      summary: Accept an incoming session for an application
+      summary: Respond to an incoming session request notification for an application
+      operationId: answerApplicationIncomingSessionRequest
       parameters:
         - name: DynamicId
           in: path
@@ -240,6 +247,7 @@ paths:
           
     delete:
       summary: Terminate a session for an application
+      operationId: terminateApplicationSession
       parameters:
         - name: DynamicId
           in: path
@@ -271,6 +279,7 @@ paths:
   /notifications/{DynamicId}/{Channel}:
     get:
       summary: Subscribe to a specific channel for an application (SSE)
+      operationId: subscribeApplicationNotificationChannel
       parameters:
         - name: DynamicId
           in: path
@@ -303,6 +312,7 @@ paths:
                 $ref: '#/components/schemas/DynamicChannelErrorData'
     delete:
       summary: Unsubscribe to a specific channel for an application
+      operationId: unsubscribeApplicationNotificationChannel
       parameters:
         - name: DynamicId
           in: path
