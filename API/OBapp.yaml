@@ -179,8 +179,16 @@ paths:
                 $ref: '#/components/schemas/SessionStatusData'
         '401':
           description: Unauthorized, local binding required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatusErrorData'
         '404':
-          description: Not found
+          description: Session {SessionId} not found for application {DynamicId}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatusErrorData'
     put:
       summary: Accept an incoming session for an application
       parameters:
