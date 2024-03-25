@@ -329,15 +329,16 @@ components:
       type: mutualTLS
   schemas:
     # FFFIS application and session identifiers
-    # TODO: need to specify the version of UUID that shall be used
     DynamicId:
-      description: "identifier of the application instance, dynamically assigned at registration. UUID."
+      description: "identifier of the application instance, dynamically assigned at registration. UUID v4."
       type: string
       format: uuid
+      maxLength: 36
     SessionId:
-      description: "identifier of the application session. UUID"
+      description: "identifier of the application session. UUID v4"
       type: string
       format: uuid
+      maxLength: 36
 
     # IPv4 / IPv6 addresses
     # Aligned with 3GPP 29.571 Common Data yaml description
@@ -382,6 +383,8 @@ components:
       properties:
         id:
           type: integer
+          format: int64
+          minimum: 0
         event:
           type: string
         data:
