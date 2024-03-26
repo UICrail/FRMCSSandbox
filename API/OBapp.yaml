@@ -474,13 +474,10 @@ components:
 
     ApplicationVersion:
       type: string
-      pattern: '^(\d+\.\d+\.\d+)$'
-      description: Semantic version of the application (e.g., 1.0.0)
-      example: 1.0.0
-      # TODO: with max 2 digits per version element, correct to 5 if only MAJOR.MINOR
-      # TODO: if restricted the pattern shall be  '^(\d{1,2}\.\d{1,2}\.\d{1,2})$'
+      pattern: '^(\d+\.\d+)$'
+      description: Semantic version of the application (e.g., 1.0)
+      example: 1.0
       minLength:  3
-      maxLength:  8
 
     ApplicationVersionsList:
       description: list of versions supported by the application 
