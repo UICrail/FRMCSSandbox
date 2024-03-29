@@ -18,14 +18,14 @@ Note over O: FRMCS Start of Operation order
 
 Note over O: selection of one or more OB RMs for FSoOP
 Note over O, FTD: OB RM registration to 5GS [765-1]
-Note over O, NFTD: OB RM registration to Non-FRMCS Transport Domain [not FRMCS-specified]
+Note over O, NFTD: [optional] OB RM registration to Non-FRMCS Transport Domain [not FRMCS-specified]
 
 Note over O: selection of an OB RM for FRMCS Multipath discovery
 Note over O, FTD: FRMCS Multipath discovery procedure [765-1]
 
-loop per LC TSA
-  Note over O: assignment of IP address to MC client
-  opt if Multipath available and Multipath enabled for TSA
+loop per Loose Coupled Startup Application
+  Note over O: assignment of IP address to MC client [765-3]
+  opt if Multipath available and Multipath enabled for the application
     Note over O, FTD: selection of applicable data paths [765-1]
   end
 end
@@ -33,7 +33,7 @@ end
 Note over O, FTD: Transport path establishment for MC signaling [765-1]
 O -->> AT:  FTD_AVL  [765-3]
 
-loop per LC TSA
+loop per Loose Coupled Startup Application
   Note over O, FSD: MC user registration  [765-2]
   O -->> AL:  FSD_AVL [765-3]
 end
