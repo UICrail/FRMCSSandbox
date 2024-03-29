@@ -105,18 +105,18 @@ participant T2 as TS GW2
 %participant B1 as RBC1
 %participant B2 as RBC2
 
-par OB setup
-	Note over O: Start of Operation 
-	Note over AL1,O: OBapp local binding
-  	Note over AL2,O: OBapp local binding
-  	Note over AL2,T1: active session S1
-  	Note over O,M1:	MC user registration
-and TS setup
-	%Note over B1,T1: TSapp local binding
-	%Note over B2,T2: TSapp local binding
-	Note over T1,M1: MC user registration
-	Note over T2,M2: MC user registration
-end
+%par OB setup
+%	Note over O: Start of Operation 
+%	Note over AL1,O: OBapp local binding
+%  	Note over AL2,O: OBapp local binding
+%  	Note over AL2,T1: active session S1
+%  	Note over O,M1:	MC user registration
+%and TS setup
+%	%Note over B1,T1: TSapp local binding
+%	%Note over B2,T2: TSapp local binding
+%	Note over T1,M1: MC user registration
+%	Note over T2,M2: MC user registration
+%end
 
 % BXL
 Note over O,M1: NTT to move to Domain 2  [765-2]
