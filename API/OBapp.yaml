@@ -239,12 +239,33 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/DynamicId'
+          examples:
+            DynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/OBSessionOpenData'
+            examples:
+              obSessionOpenDataIpV4:
+                summary: example of open session data ipv4
+                value:
+                    localAppIPAddress:
+                      ipv4Addr: "198.168.100.50"
+                    recipientsList:
+                      - remoteAddress: etcs-ts.etcs
+                        communicationCategory: basic
+              obSessionOpenDataIpV6:
+                summary: example of open session data ipv6
+                value:      
+                    localAppIPAddress: 
+                      ipv6Addr: "2001:db8:85a3::8a2e:370:7334"
+                    recipientsList:
+                      - remoteAddress: ato-ob.ato
+                        communicationCategory: basic
       responses:
         '201':
           description: 'Session created'
@@ -254,28 +275,58 @@ paths:
               required: true
               schema:
                 $ref: '#/components/schemas/Uri'
+              examples:
+                Location:
+                  value: "https://192.168.1.254/obapp/v1.0/registrations/4210f20b-23e6-4354-bb1a-be4e0bc56f57/ca7b8255-447b-416e-97ba-ee0cbd0a1652"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionOpenedData'
+              examples:
+                sessionOpenedData:
+                  summary: example of successful response for session opening   
+                  value:
+                    sessionId: ca7b8255-447b-416e-97ba-ee0cbd0a1652
+                    sessionStatus: inProgress
         '400':
           description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionOpenErrorData'
+              examples:
+                SessionOpenErrorData:
+                  summary: example error response for session opening bad request
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                    cause: "ILL_FORMED_REQUEST"
+                    detail: "Missing parameter"
         '401':
           description: Unauthorized, local binding required
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionOpenErrorData'
+              examples:
+                SessionsListErrorData:
+                  summary: example error response for unauthorized session opening 
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                    cause: UNREGISTERED
+                    details: "Session opening unauthorized; local binding required"
         '403':
           description: Forbidden, session initiation not authorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionOpenErrorData'
+              examples:
+                SessionsListErrorData:
+                  summary: example error response for unauthorized session opening 
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                    cause: UNAUTHORIZED
+                    details: "Session opening unauthorized"
     delete:
       summary: Terminate all sessions for an application
       operationId: terminateApplicationSessions
