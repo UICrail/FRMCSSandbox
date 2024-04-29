@@ -843,7 +843,13 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/SessionId'
-    
+
+    SessionsListErrorData:
+      description: Data in case of error when listing sessions for an application
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
+        
     SessionTerminateErrorData:
       description: Data in case of error when terminating a session
       type: object
