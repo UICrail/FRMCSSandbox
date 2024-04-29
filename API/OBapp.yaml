@@ -92,7 +92,7 @@ paths:
                 $ref: '#/components/schemas/Uri'
               examples:
                 Location:
-                  value: "https://192.168.1.254/obapp/v1.0/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                  value: "https://192.168.1.254/obapp/v1.0/registrations/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
           content:
             application/json:
               schema:
@@ -142,6 +142,10 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/DynamicId'
+          examples:
+            dynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
       responses:
         '204':
           description: No content (application deregistered)
@@ -151,12 +155,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeRegisterErrorData'
+              examples:
+                deRegisterErrorData:
+                  summary: example error of deregsitration unauthorized response
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/registrations/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                    cause: UNREGISTERED
+                    details: "Deregistration unauthorized; local binding required"
         '404':
           description: Application with {DynamicId} not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeRegisterErrorData'
+              examples:
+                deRegisterErrorData:
+                  summary: example error of regsitration not found request  response
+                  value: 
+                    resource: "https://192.168.1.254/obapp/v1.0/registrations/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                    cause: "NOT_FOUND"
+                    details: "Application with {DynamicId} 4210f20b-23e6-4354-bb1a-be4e0bc56f57 not found for deregistration"
 
   /sessions/{DynamicId}:
     get:
