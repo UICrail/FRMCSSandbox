@@ -373,23 +373,47 @@ paths:
               value: ca7b8255-447b-416e-97ba-ee0cbd0a1652
       responses:
         '200':
-          description: OK
+          description: Successful operation get information about a session
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionStatusData'
+              examples:
+                sessionStatusData:
+                  value:
+                    sessionOriginator: localApplication
+                    communicationCategory: basic
+                    nextHopIPAddress:
+                      ipv4Addr: 192.168.1.221
+                    destApplicationIPAddress:
+                      ipv4Addr: 172.16.5.1
+                    remoteAddress: etcs-ts.etcs
         '401':
           description: Unauthorized, local binding required
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionStatusErrorData'
+              examples:
+                SessionStatusErrorData:
+                  summary: example error response for unauthorized session status listing
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/ca7b8255-447b-416e-97ba-ee0cbd0a1652"
+                    cause: UNREGISTERED
+                    details: "Session status listing unauthorized; local binding required"
         '404':
           description: Session {SessionId} not found for application {DynamicId}
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionStatusErrorData'
+              examples:
+                SessionStatusErrorData:
+                  summary: example error response for session status listing for a session not found
+                  value: 
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/ca7b8255-447b-416e-97ba-ee0cbd0a1652"
+                    cause: "NOT_FOUND"
+                    details: "Session with {SessionId} ca7b8255-447b-416e-97ba-ee0cbd0a1652 not found for sessions listing"
     put:
       summary: Respond to an incoming session request notification for an application
       operationId: answerApplicationIncomingSessionRequest
@@ -415,11 +439,18 @@ paths:
               summary: UUID associated to a session
               value: ca7b8255-447b-416e-97ba-ee0cbd0a1652
       requestBody:
+        description: Request body to respond to an incoming session request 
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/IncomingSessionNotificationResponseData'
+            examples:
+              IncomingSessionNotificationResponseData:
+               value:
+                 appResponse: accepted
+                 localAppIPAddress:
+                    ipv4Addr: 198.50.200.1
       responses:
         '200':
           description: OK, sent if the application has accepted the incoming session request
@@ -429,6 +460,9 @@ paths:
               required: true
               schema:
                 $ref: '#/components/schemas/Uri'
+              examples:
+                Location:
+                  value: "https://192.168.1.254/obapp/v1.0/registrations/4210f20b-23e6-4354-bb1a-be4e0bc56f57/ca7b8255-447b-416e-97ba-ee0cbd0a1652"
         '204':
           description: No content (acknowledgement of the application having declined the incoming session request)
         '400':
@@ -437,18 +471,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IncomingSessionNotificationResponseErrorData'
+              examples:
+                IncomingSessionNotificationResponseErrorData:
+                  summary: example error response for incoming session response bad request
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/ca7b8255-447b-416e-97ba-ee0cbd0a1652"
+                    cause: "ILL_FORMED_REQUEST"
+                    details: "Incoming session response; missing parameter 'appResponse'"
         '401':
           description: Unauthorized, local binding required
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/IncomingSessionNotificationResponseErrorData'
+              examples:
+                IncomingSessionNotificationResponseErrorData:
+                  summary: example error response for unauthorized incoming session response
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/ca7b8255-447b-416e-97ba-ee0cbd0a1652"
+                    cause: UNREGISTERED
+                    details: "Incoming session response unauthorized; local binding required"
         '404':
           description: Not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/IncomingSessionNotificationResponseErrorData'
+              examples:
+                IncomingSessionNotificationResponseErrorData:
+                  summary: example error response for incoming session response for a session not found
+                  value: 
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/ca7b8255-447b-416e-97ba-ee0cbd0a1652"
+                    cause: "NOT_FOUND"
+                    details: "Session with {SessionId} ca7b8255-447b-416e-97ba-ee0cbd0a1652 not found"
           
     delete:
       summary: Terminate a session for an application
@@ -484,12 +539,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionTerminateErrorData'
+              examples:
+                SessionTerminateErrorData:
+                  summary: example error response for unauthorized session termination
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/ca7b8255-447b-416e-97ba-ee0cbd0a1652"
+                    cause: UNREGISTERED
+                    details: "Session termination unauthorized; local binding required"
         '403':
           description: Forbidden
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionTerminateErrorData'
+              examples:
+                SessionTerminateErrorData:
+                  summary: example error response for unauthorized session termination 
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                    cause: UNAUTHORIZED
+                    details: "Session termination unauthorized"
 
   /notifications/{DynamicId}/{Channel}:
     get:
