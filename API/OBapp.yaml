@@ -111,7 +111,7 @@ paths:
                 $ref: '#/components/schemas/RegisterErrorData'
               examples:
                 registerErrorData:
-                  summary: example of register error in case of bad request
+                  summary: example error response for registration bad request
                   value:
                     resource: "https://192.168.1.254/obapp/v1.0/registrations"
                     cause: "ILL_FORMED_REQUEST"
@@ -124,7 +124,7 @@ paths:
                 $ref: '#/components/schemas/RegisterErrorData'
               examples:
                 registerErrorData:
-                  summary: example of registration error Forbidden
+                  summary: example error response for registration Forbidden
                   value:
                     resource: "https://192.168.1.254/obapp/v1.0/registrations"
                     cause: "UNAUTH_UNKNOWN_APP_CATEGORY"
@@ -157,7 +157,7 @@ paths:
                 $ref: '#/components/schemas/DeRegisterErrorData'
               examples:
                 deRegisterErrorData:
-                  summary: example error of deregsitration unauthorized response
+                  summary: example error response for unauthorized deregistration
                   value:
                     resource: "https://192.168.1.254/obapp/v1.0/registrations/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
                     cause: UNREGISTERED
@@ -170,7 +170,7 @@ paths:
                 $ref: '#/components/schemas/DeRegisterErrorData'
               examples:
                 deRegisterErrorData:
-                  summary: example error of regsitration not found request  response
+                  summary: example error response for deregistration of a registration not found  
                   value: 
                     resource: "https://192.168.1.254/obapp/v1.0/registrations/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
                     cause: "NOT_FOUND"
@@ -188,6 +188,10 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/DynamicId'
+          examples:
+            DynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
       responses:
         '200':
           description: OK
@@ -195,10 +199,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SessionsListData'
+              examples:
+                SessionsListData:
+                  value: ["ca7b8255-447b-416e-97ba-ee0cbd0a1652", "dc9b42be-6945-47ff-9158-7cce4c9e1580", "eaf35690-17df-4c3d-8f59-51dc1cc1525b" ]
         '401':
           description: Unauthorized, local binding required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionsListErrorData'
+              examples:
+                SessionsListErrorData:
+                  summary: example error response for unauthorized sessions listing 
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                    cause: UNREGISTERED
+                    details: "Sessions listing unauthorized; local binding required"
         '404':
           description: Application with {DynamicId} not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionsListErrorData'
+              examples:
+                SessionsListErrorData:
+                  summary: example error response for sessions listing for a registration not found
+                  value: 
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
+                    cause: "NOT_FOUND"
+                    details: "Application with {DynamicId} 4210f20b-23e6-4354-bb1a-be4e0bc56f57 not found for sessions listing"
     post:
       summary: Create a session for an application
       operationId: createApplicationSession
