@@ -9,12 +9,17 @@ externalDocs:
   description: OBapp reference point
   url: https://uic.org/rail-system/telecoms-signalling/frmcs
 servers:
-  - url: '{apiRoot}/obapp/v1'
+  - url: '{apiRoot}/obapp/{apiVersion}'
     variables:
       apiRoot:
         default: https://uic.org
-        description: apiRoot as defined in clause x.y of UIC FFFIS xyz
+        description: apiRoot as defined in clause 9.5 of UIC FFFIS 
+      apiVersion:
+        default: v1
+        description: version of the API (see clause 9.6 of UIC FFFIS)
 tags:
+  - name: version management
+    description: Management of interface version
   - name: registration management
     description: Management of application registration
   - name: session management
@@ -23,6 +28,41 @@ tags:
     description: Management of application notifications
 
 paths:
+  /versions:
+    get:
+      summary: List of OBapp versions supported by the Onboard FRMCS
+      description: |
+        Operation used to list the OBapp versions supported by the Onboard FRMCS.
+        Can be invoked without local registration
+      operationId: listObAppVersion
+      tags:
+        - version management
+      responses:
+        '200':
+          description: Successful operation - list major and minor versions of OBapp supported by the Onboard FRMCS 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationVersionsList"
+              examples:
+                ApplicationVersionsList:
+                  value:
+                    majorVersions: ["1.0", "2.0", "3.0"]
+                    minorVersions: ["1.1", "2.1"]
+        '400':
+          description: Bad request to list versions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionsErrorData"
+#              examples:
+#                registerErrorData:
+#                  summary: example of list apis version in case of bad request 
+#                  value:
+#                    resource: "https://uic.org/versions"
+#                    cause: "ILL_FORMED_REQUEST"
+#                    detail: "Wrong format of path variable in request"
+                    
   /registrations:
     post:
       summary: Register an application
@@ -472,19 +512,41 @@ components:
       description: Unique identifier of the Application.
       type: string
 
+    # Versioning of the interface 
     ApplicationVersion:
       type: string
       pattern: '^(\d+\.\d+)$'
       description: Semantic version of the application (e.g., 1.0)
-      example: 1.0
+      examples:
+        - '1.0'
       minLength:  3
 
     ApplicationVersionsList:
       description: list of versions supported by the application 
+#      type: array
+#      items:
+#        $ref: "#/components/schemas/ApplicationVersion"
+#      minItems: 1
+      type: object
+      properties:
+        majorVersions:
+          $ref: "#/components/schemas/MajorVersions"
+        minorVersions:
+          $ref: "#/components/schemas/MinorVersions"
+    
+    MajorVersions:
+      description: list of major  versions supported   by the application
       type: array
       items:
-        $ref: '#/components/schemas/ApplicationVersion'
+        $ref: "#/components/schemas/ApplicationVersion"
       minItems: 1
+      
+    MinorVersions:
+      description: list of minor  versions supported   by the application
+      type: array
+      items:
+        $ref: "#/components/schemas/ApplicationVersion"
+      minItems: 0
       
     Channel:
       description: Channel of notification
@@ -711,3 +773,9 @@ components:
       type: object
       oneOf:
         - $ref: '#/components/schemas/GenericErrorData'
+
+    VersionsErrorData:
+      description: Data in case of error when requestuion supported versions
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/GenericErrorData"
