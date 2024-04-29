@@ -75,6 +75,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RegisterData'
+            examples:
+              RegisterData:
+                value:
+                  appCategory: ETCS
+                  staticId: etcs-ob.etcs
+                  couplingMode: loose
       responses:
         '201':
           description: Successful registration
@@ -84,22 +90,45 @@ paths:
               required: true
               schema:
                 $ref: '#/components/schemas/Uri'
+              examples:
+                Location:
+                  value: "https://192.168.1.254/obapp/v1.0/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RegisteredData'
+              examples:
+                registeredData:
+                  summary: registration data example
+                  value:
+                    appObId: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
+                    selectedVersion: "1.0"
         '400':
           description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RegisterErrorData'
+              examples:
+                registerErrorData:
+                  summary: example of register error in case of bad request
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/registrations"
+                    cause: "ILL_FORMED_REQUEST"
+                    detail: "the field couplingMode must be loose or tight"
         '403':
           description: Forbidden (unrecognized application, ...)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RegisterErrorData'
+              examples:
+                registerErrorData:
+                  summary: example of registration error Forbidden
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/registrations"
+                    cause: "UNAUTH_UNKNOWN_APP_CATEGORY"
+                    detail: "the voice application cannot use the 'couplingMode' parameter with value 'loose'"
 
   /registrations/{DynamicId}:
     delete:
