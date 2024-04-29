@@ -26,6 +26,8 @@ tags:
     description: Management of application sessions
   - name: notification management
     description: Management of application notifications
+  - name: keepalive management
+    description: Management of keepalive endpoint for application
 
 paths:
   /versions:
