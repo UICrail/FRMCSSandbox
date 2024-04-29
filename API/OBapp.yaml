@@ -358,11 +358,19 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/DynamicId'
+          examples:
+            DynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
         - name: SessionId
           in: path
           required: true
           schema:
             $ref: '#/components/schemas/SessionId'
+          examples:
+            SessionId:
+              summary: UUID associated to a session
+              value: ca7b8255-447b-416e-97ba-ee0cbd0a1652
       responses:
         '200':
           description: OK
@@ -393,11 +401,19 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/DynamicId'
+          examples:
+            DynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
         - name: SessionId
           in: path
           required: true
           schema:
             $ref: '#/components/schemas/SessionId'
+          examples:
+            SessionId:
+              summary: UUID associated to a session
+              value: ca7b8255-447b-416e-97ba-ee0cbd0a1652
       requestBody:
         required: true
         content:
@@ -445,11 +461,19 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/DynamicId'
+          examples:
+            DynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
         - name: SessionId
           in: path
           required: true
           schema:
             $ref: '#/components/schemas/SessionId'
+          examples:
+            SessionId:
+              summary: UUID associated to a session
+              value: ca7b8255-447b-416e-97ba-ee0cbd0a1652
       responses:
         '204':
           description: No content (session terminated)
