@@ -618,6 +618,16 @@ paths:
         '204':
           description: No content (channel unsubscribed)
 
+  /keepalive:
+    get:
+      summary: Check the server is alive at the HTTP level
+      operationId: checkKeepalive
+      tags:
+        - keepalive management
+      responses:
+        '204':
+          description: No content (acknowledgement of the server being responsive on the control plane)
+
 components:
   securitySchemes:
     clientCert:
