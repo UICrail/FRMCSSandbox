@@ -124,12 +124,7 @@ paths:
                     detail: "the voice application cannot use the 'couplingMode' parameter with value 'loose'"
 
   /registrations/{DynamicId}:
-    delete:
-      summary: De-register an application
-      operationId: deregisterApplication
-      tags:
-        - registration management
-      parameters:
+    parameters:
         - name: DynamicId
           in: path
           required: true
@@ -139,6 +134,11 @@ paths:
             dynamicId:
               summary: UUID associated to a successful registration
               value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
+    delete:
+      summary: De-register an application
+      operationId: deregisterApplication
+      tags:
+        - registration management
       responses:
         '204':
           description: No content (application deregistered)
@@ -170,21 +170,17 @@ paths:
                     details: "Application with {DynamicId} 4210f20b-23e6-4354-bb1a-be4e0bc56f57 not found for deregistration"
 
   /sessions/{DynamicId}:
-    get:
-      summary: List of sessions for an application
-      operationId: listApplicationSessions
-      tags:
-        - session management
-      parameters:
+    parameters:
         - name: DynamicId
           in: path
           required: true
           schema:
             $ref: '#/components/schemas/DynamicId'
-          examples:
-            DynamicId:
-              summary: UUID associated to a successful registration
-              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
+    get:
+      summary: List of sessions for an application
+      operationId: listApplicationSessions
+      tags:
+        - session management
       responses:
         '200':
           description: OK
@@ -226,16 +222,6 @@ paths:
       operationId: createApplicationSession
       tags:
         - session management
-      parameters:
-        - name: DynamicId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/DynamicId'
-          examples:
-            DynamicId:
-              summary: UUID associated to a successful registration
-              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
       requestBody:
         required: true
         content:
@@ -325,12 +311,6 @@ paths:
       operationId: terminateApplicationSessions
       tags:
         - session management
-      parameters:
-        - name: DynamicId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/DynamicId'
       responses:
         '204':
           description: No content (sessions terminated)
@@ -340,12 +320,7 @@ paths:
           description: Not found
 
   /sessions/{DynamicId}/{SessionId}:
-    get:
-      summary: Get information on a session of an application
-      operationId: listApplicationSessionStatus
-      tags:
-        - session management
-      parameters:
+    parameters:
         - name: DynamicId
           in: path
           required: true
@@ -364,6 +339,11 @@ paths:
             SessionId:
               summary: UUID associated to a session
               value: ca7b8255-447b-416e-97ba-ee0cbd0a1652
+    get:
+      summary: Get information on a session of an application
+      operationId: listApplicationSessionStatus
+      tags:
+        - session management
       responses:
         '200':
           description: Successful operation get information about a session
@@ -412,25 +392,6 @@ paths:
       operationId: answerApplicationIncomingSessionRequest
       tags:
         - session management
-      parameters:
-        - name: DynamicId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/DynamicId'
-          examples:
-            DynamicId:
-              summary: UUID associated to a successful registration
-              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
-        - name: SessionId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/SessionId'
-          examples:
-            SessionId:
-              summary: UUID associated to a session
-              value: ca7b8255-447b-416e-97ba-ee0cbd0a1652
       requestBody:
         description: Request body to respond to an incoming session request 
         required: true
@@ -503,25 +464,6 @@ paths:
       operationId: terminateApplicationSession
       tags:
         - session management
-      parameters:
-        - name: DynamicId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/DynamicId'
-          examples:
-            DynamicId:
-              summary: UUID associated to a successful registration
-              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
-        - name: SessionId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/SessionId'
-          examples:
-            SessionId:
-              summary: UUID associated to a session
-              value: ca7b8255-447b-416e-97ba-ee0cbd0a1652
       responses:
         '204':
           description: No content (session terminated)
@@ -554,12 +496,7 @@ paths:
                     details: "Session termination unauthorized"
   
   /notifications/{DynamicId}/events:
-    get:
-      summary: Subscribe to notification event stream for an application (SSE)
-      operationId: subscribeApplicationNotificationEventStream
-      tags:
-        - notification management
-      parameters:
+    parameters:
         - name: DynamicId
           in: path
           required: true
@@ -569,6 +506,11 @@ paths:
             DynamicId:
               summary: UUID associated to a successful registration
               value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
+    get:
+      summary: Subscribe to notification event stream for an application (SSE)
+      operationId: subscribeApplicationNotificationEventStream
+      tags:
+        - notification management
       responses:
         '200':
           description: SSE notifications
@@ -604,12 +546,7 @@ paths:
               
                 
   /notifications/{DynamicId}/channels:
-    get:
-      summary: Get information on subscriptions to notifications for an application
-      operationId: listApplicationSubscriptions
-      tags:
-        - notification management
-      parameters:
+    parameters:
         - name: DynamicId
           in: path
           required: true
@@ -619,6 +556,11 @@ paths:
             DynamicId:
               summary: UUID associated to a successful registration
               value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
+    get:
+      summary: Get information on subscriptions to notifications for an application
+      operationId: listApplicationSubscriptions
+      tags:
+        - notification management
       responses:
         '200':
           description: Successful operation list subscriptions
@@ -670,16 +612,6 @@ paths:
       operationId: deleteApplicationSubscriptions
       tags:
         - notification management
-      parameters:
-        - name: DynamicId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/DynamicId'
-          examples:
-            DynamicId:
-              summary: UUID associated to a successful registration
-              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
       responses:
         '204':
           description: No content (subscriptions removal successful)
@@ -724,12 +656,7 @@ paths:
                     details: "Application with {DynamicId} 4210f20b-23e6-4354-bb1a-be4e0bc56f57 not found"
     
   /notifications/{DynamicId}/channels/{Channel}:
-    post:
-      summary: Subscribe to a specific channel for an application (→ SSE)
-      operationId: subscribeApplicationNotificationChannel
-      tags:
-        - notification management
-      parameters:
+    parameters:
         - name: DynamicId
           in: path
           required: true
@@ -740,6 +667,11 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/Channel'
+    post:
+      summary: Subscribe to a specific channel for an application (→ SSE)
+      operationId: subscribeApplicationNotificationChannel
+      tags:
+        - notification management
       responses:
         '201':
           description: Succsessful subscription
@@ -748,35 +680,24 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationNotificationSubscriptionErrorData'
+                $ref: '#/components/schemas/NotificationSubscriptionErrorData'
         '403':
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationNotificationSubscriptionErrorData'
+                $ref: '#/components/schemas/NotificationSubscriptionErrorData'
         '404':
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationNotificationSubscriptionErrorData'
+                $ref: '#/components/schemas/NotificationSubscriptionErrorData'
     delete:
       summary: Unsubscribe to a specific channel for an application
       operationId: unsubscribeApplicationNotificationChannel
       tags:
         - notification management
-      parameters:
-        - name: DynamicId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/DynamicId'
-        - name: Channel
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/Channel'
       responses:
         '204':
           description: No content (channel unsubscribed)
@@ -1169,7 +1090,7 @@ components:
         - $ref: '#/components/schemas/GenericErrorData'
 
     # Subscriptions
-    ApplicationNotificationSubscriptionErrorData:
+    NotificationSubscriptionErrorData:
       description: Data in case of error when subscribing to a notification channel
       type: object
       oneOf:
