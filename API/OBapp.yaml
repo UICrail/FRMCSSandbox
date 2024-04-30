@@ -723,9 +723,9 @@ paths:
                     cause: "NOT_FOUND"
                     details: "Application with {DynamicId} 4210f20b-23e6-4354-bb1a-be4e0bc56f57 not found"
     
-  /notifications/{DynamicId}/{Channel}:
-    get:
-      summary: Subscribe to a specific channel for an application (SSE)
+  /notifications/{DynamicId}/channels/{Channel}:
+    post:
+      summary: Subscribe to a specific channel for an application (→ SSE)
       operationId: subscribeApplicationNotificationChannel
       tags:
         - notification management
@@ -741,24 +741,26 @@ paths:
           schema:
             $ref: '#/components/schemas/Channel'
       responses:
-        '200':
-          description: SSE notifications
-          content:
-            text/event-stream:
-              schema:
-                $ref: '#/components/schemas/EventStream'
+        '201':
+          description: Succsessful subscription
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DynamicChannelErrorData'
+                $ref: '#/components/schemas/ApplicationNotificationSubscriptionErrorData'
         '403':
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DynamicChannelErrorData'
+                $ref: '#/components/schemas/ApplicationNotificationSubscriptionErrorData'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationNotificationSubscriptionErrorData'
     delete:
       summary: Unsubscribe to a specific channel for an application
       operationId: unsubscribeApplicationNotificationChannel
@@ -1166,6 +1168,13 @@ components:
       oneOf:
         - $ref: '#/components/schemas/GenericErrorData'
 
+    # Subscriptions
+    ApplicationNotificationSubscriptionErrorData:
+      description: Data in case of error when subscribing to a notification channel
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
+        
     SubscriptionData:
       description: subscription data for a channel other than general
       type: object
