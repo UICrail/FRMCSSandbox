@@ -553,6 +553,56 @@ paths:
                     cause: UNAUTHORIZED
                     details: "Session termination unauthorized"
   
+  /notifications/{DynamicId}/events:
+    get:
+      summary: Subscribe to notification event stream for an application (SSE)
+      operationId: subscribeApplicationNotificationEventStream
+      tags:
+        - notification management
+      parameters:
+        - name: DynamicId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/DynamicId'
+          examples:
+            DynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
+      responses:
+        '200':
+          description: SSE notifications
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/EventStream'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventStreamErrorData'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventStreamErrorData'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventStreamErrorData'
+              examples:
+                EventStreamErrorData:
+                  summary: example error response for event stream subscription for a {DynamicId} not found
+                  value: 
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/events"
+                    cause: "NOT_FOUND"
+                    details: "Application with {DynamicId} 4210f20b-23e6-4354-bb1a-be4e0bc56f57 not found"
+              
+                
   /notifications/{DynamicId}/channels:
     get:
       summary: Get information on subscriptions to notifications for an application
@@ -821,7 +871,13 @@ components:
           oneOf:
             - $ref: "#/components/schemas/GeneralChannelEventStreamData"
             - $ref: "#/components/schemas/LocationChannelEventStreamData"
-    
+
+    EventStreamErrorData:
+      description: Data in case of SSE subscription error
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
+        
     GeneralChannelEventStreamData:
       description: data on general event stream
       type: object
