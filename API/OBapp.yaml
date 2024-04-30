@@ -33,10 +33,10 @@ paths:
   /versions:
     servers:
       - url: '{apiRoot}/obapp'
-      variables:
-        apiRoot:
-          default: https://obapp.uic.org
-          description: apiRoot as defined in clause 9.5 of UIC FFFIS 
+        variables:
+          apiRoot:
+            default: https://obapp.uic.org
+            description: apiRoot as defined in clause 9.5 of UIC FFFIS 
     get:
       summary: List of OBapp versions supported by the Onboard FRMCS
       description: |
@@ -552,7 +552,127 @@ paths:
                     resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57"
                     cause: UNAUTHORIZED
                     details: "Session termination unauthorized"
-
+  
+  /notifications/{DynamicId}/channels:
+    get:
+      summary: Get information on subscriptions to notifications for an application
+      operationId: listApplicationSubscriptions
+      tags:
+        - notification management
+      parameters:
+        - name: DynamicId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/DynamicId'
+          examples:
+            DynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
+      responses:
+        '200':
+          description: Successful operation list subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsListData'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsListErrorData'
+              examples:
+                SubscriptionsListErrorData:
+                  summary: example error response for unauthorized listing of subscriptions
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/channels"
+                    cause: UNREGISTERED
+                    details: "Listing of subscriptions unauthorized; local binding required"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsListErrorData'
+              examples:
+                SubscriptionsListErrorData:
+                  summary: example error response for unauthorized listing of subscriptions
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/channels"
+                    cause: UNAUTHORIZED
+                    details: "Listing of subscriptions unauthorized"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsListErrorData'
+              examples:
+                SubscriptionsListErrorData:
+                  summary: example error response for listing subscriptions for a {DynamicId} not found
+                  value: 
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/channels"
+                    cause: "NOT_FOUND"
+                    details: "Application with {DynamicId} 4210f20b-23e6-4354-bb1a-be4e0bc56f57 not found"
+    delete:
+      summary: Unsubscribe to all subscriptions to notifications for an application except for the general channel
+      operationId: deleteApplicationSubscriptions
+      tags:
+        - notification management
+      parameters:
+        - name: DynamicId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/DynamicId'
+          examples:
+            DynamicId:
+              summary: UUID associated to a successful registration
+              value: 4210f20b-23e6-4354-bb1a-be4e0bc56f57
+      responses:
+        '204':
+          description: No content (subscriptions removal successful)
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsRemovalErrorData'
+              examples:
+                SubscriptionsRemovalErrorData:
+                  summary: example error response for unauthorized removal of subscriptions
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/channels"
+                    cause: UNREGISTERED
+                    details: "Removal of subscriptions unauthorized; local binding required"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsRemovalErrorData'
+              examples:
+                SubscriptionsRemovalErrorData:
+                  summary: example error response for unauthorized removal of subscriptions
+                  value:
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/channels"
+                    cause: UNAUTHORIZED
+                    details: "Removal of subscriptions unauthorized"
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionsRemovalErrorData'
+              examples:
+                SubscriptionsRemovalErrorData:
+                  summary: example error response for bulk unsubscriptions for a {DynamicId} not found
+                  value: 
+                    resource: "https://192.168.1.254/obapp/v1.0/sessions/4210f20b-23e6-4354-bb1a-be4e0bc56f57/channels"
+                    cause: "NOT_FOUND"
+                    details: "Application with {DynamicId} 4210f20b-23e6-4354-bb1a-be4e0bc56f57 not found"
+    
   /notifications/{DynamicId}/{Channel}:
     get:
       summary: Subscribe to a specific channel for an application (SSE)
@@ -626,12 +746,17 @@ components:
   schemas:
     # FFFIS application and session identifiers
     DynamicId:
-      description: "identifier of the application instance, dynamically assigned at registration. UUID v4."
+      description: "identifier of an application instance, dynamically assigned at registration. UUID v4."
       type: string
       format: uuid
       maxLength: 36
     SessionId:
-      description: "identifier of the application session. UUID v4"
+      description: "identifier of an application session. UUID v4"
+      type: string
+      format: uuid
+      maxLength: 36
+    SubscriptionId:
+      description: "identifier of an application subscription. UUID v4"
       type: string
       format: uuid
       maxLength: 36
@@ -981,6 +1106,34 @@ components:
         
     SessionTerminateErrorData:
       description: Data in case of error when terminating a session
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
+
+    SubscriptionData:
+      description: subscription data for a channel other than general
+      type: object
+      properties:
+        subscriptionId:
+          $ref: '#/components/schemas/SubscriptionId'
+        channel:
+          $ref: '#/components/schemas/Channel'
+        parameters:
+          type: object
+    
+    SubscriptionsListData:
+      description: list of subscriptions data
+      type: array
+      items:
+        $ref: '#/components/schemas/SubscriptionData'
+        
+    SubscriptionsListErrorData:
+      description: Data in case of error when listing subscriptions for an application
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/GenericErrorData'
+    SubscriptionsRemovalErrorData:
+      description: Data in case of error when removing subscriptions for an application
       type: object
       oneOf:
         - $ref: '#/components/schemas/GenericErrorData'
