@@ -12,10 +12,10 @@ servers:
   - url: '{apiRoot}/obapp/{apiVersion}'
     variables:
       apiRoot:
-        default: https://uic.org
+        default: https://obapp.uic.org
         description: apiRoot as defined in clause 9.5 of UIC FFFIS 
       apiVersion:
-        default: v1
+        default: v1.0
         description: version of the API (see clause 9.6 of UIC FFFIS)
 tags:
   - name: version management
@@ -31,6 +31,12 @@ tags:
 
 paths:
   /versions:
+    servers:
+      - url: '{apiRoot}/obapp'
+      variables:
+        apiRoot:
+          default: https://obapp.uic.org
+          description: apiRoot as defined in clause 9.5 of UIC FFFIS 
     get:
       summary: List of OBapp versions supported by the Onboard FRMCS
       description: |
