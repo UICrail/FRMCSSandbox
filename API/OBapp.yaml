@@ -1123,9 +1123,3 @@ components:
       type: object
       oneOf:
         - $ref: '#/components/schemas/GenericErrorData'
-
-    VersionsErrorData:
-      description: Data in case of error when requestuion supported versions
-      type: object
-      oneOf:
-        - $ref: "#/components/schemas/GenericErrorData"
